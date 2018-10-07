@@ -8,66 +8,138 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="MineralArmTest", group="Testing")
 public class MineralArmTest extends LinearOpMode {
 
     //Declare Hardware
-    private DcMotor motor;
-    private CRServo servo1;
-    private CRServo servo2;
+    private DcMotor armMotor;
+    private DcMotor leftFrontMotor;
+    private DcMotor leftBackMotor;
+    private DcMotor rightFrontMotor;
+    private DcMotor rightBackMotor;
+    private CRServo armServo1;
+    private CRServo armServo2;
     private Servo collector;
 
     public void runOpMode() {
-        double power = 0.5;
+        double servoPower = 1;
+        double motorPower = 0.5;
         double collectorPos = 0.5;
         telemetry.addData("Status:", "Initialising");
         telemetry.update();
         //Initialise Hardware
-        motor = hardwareMap.get(DcMotor.class, "motor");
-        servo1 = hardwareMap.get(CRServo.class, "servo1");
-        servo2 = hardwareMap.get(CRServo.class, "servo2");
+        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
+        leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
+        leftBackMotor = hardwareMap.get(DcMotor.class,"leftBackMotor");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
+        rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
+        armServo1 = hardwareMap.get(CRServo.class, "servo1");
+        armServo2 = hardwareMap.get(CRServo.class, "armServo2");
         collector = hardwareMap.get(Servo.class, "collector");
         collector.setPosition(collectorPos);
+
+        //Correct motor directions
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Initialize driving variables
+        boolean tankDrive, doubleDrive;
+        double left, right;
+        left = right = 0;
 
         waitForStart();
         telemetry.addData("Status:", "Starting OpMode");
         telemetry.update();
         while (opModeIsActive()) {
-            if (gamepad1.a)
-                motor.setPower(power);
-            else if (gamepad1.b)
-                motor.setPower(-power);
+            if (gamepad2.a)
+                armMotor.setPower(-motorPower);
+            else if (gamepad2.b)
+                armMotor.setPower(motorPower);
             else
-                motor.setPower(0);
+                armMotor.setPower(0);
 
-            if (gamepad1.dpad_left)
-                servo1.setPower(power);
-            else if (gamepad1.dpad_right)
-                servo1.setPower(-power);
+            if (gamepad2.dpad_left)
+                armServo1.setPower(servoPower);
+            else if (gamepad2.dpad_right)
+                armServo1.setPower(servoPower);
             else
-                servo1.setPower(0);
+                armServo1.setPower(0);
 
-            if (gamepad1.dpad_up)
-                servo2.setPower(power);
-            else if (gamepad1.dpad_down)
-                servo2.setPower(-power);
+            if (gamepad2.dpad_up)
+                armServo2.setPower(servoPower);
+            else if (gamepad2.dpad_down)
+                armServo2.setPower(-servoPower);
             else
-                servo2.setPower(0);
+                armServo2.setPower(0);
 
-            if (gamepad1.right_trigger > 0.1) {
+            if (gamepad2.right_trigger > 0.0) {
                 if (collectorPos < 1) {
-                    collector.setPosition(collectorPos + 0.05);
-                    collectorPos += 0.05;
+                    collector.setPosition(collectorPos + (0.01 * gamepad2.right_trigger));
+                    collectorPos = collector.getPosition();
                 }
             }
-            else if (gamepad1.left_trigger > 0.1) {
+            else if (gamepad2.left_trigger > 0.0) {
                 if (collectorPos > 0) {
-                    collector.setPosition(collectorPos - 0.05);
-                    collectorPos -= 0.05;
+                    collector.setPosition(collectorPos - (0.01 * gamepad2.left_trigger));
+                    collectorPos = collector.getPosition();
                 }
             }
+
+            //Code for driving
+            if (gamepad1.dpad_up) {
+                tankDrive = true;
+                doubleDrive = false;
+                telemetry.addData("Tank Drive", true);
+            }
+            else if (gamepad1.dpad_down) {
+                tankDrive = false;
+                doubleDrive = false;
+                telemetry.addData("Single Drive", true);
+            }
+            else {
+                tankDrive = false;
+                doubleDrive = true;
+                telemetry.addData("Double Drive", true);
+            }
+
+
+            if (tankDrive) {
+                left = -gamepad1.left_stick_y;
+                right = -gamepad1.right_stick_y;
+            }
+            else {
+                double drive = -gamepad1.left_stick_y;
+                double turn = gamepad1.left_stick_x;
+
+                if (doubleDrive) {
+                    turn = gamepad1.right_stick_x;
+                }
+
+                // Combine drive and turn for blended motion.
+                left = drive + turn;
+                right = drive - turn;
+
+                // Normalize the values so neither exceed +/- 1.0
+                double maxPower = Math.max(Math.abs(left), Math.abs(right));
+                if (maxPower > 1.0) {
+                    left /= maxPower;
+                    right /= maxPower;
+                }
+            }
+
+            telemetry.addData("Left power: ", left);
+            telemetry.addData("Right power: ", right);
+            telemetry.addData("left_stick_y: ", gamepad1.left_stick_y);
+            telemetry.addData("right_stick_x: ", gamepad1.right_stick_x);
+
+            leftBackMotor.setPower(left);
+            rightBackMotor.setPower(right);
+            leftFrontMotor.setPower(left);
+            rightFrontMotor.setPower(right);
+            // End code for driving
+
             sleep(10);
         }
     }
