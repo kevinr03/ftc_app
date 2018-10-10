@@ -20,34 +20,40 @@ public class MineralArmTest extends LinearOpMode {
     private DcMotor leftBackMotor;
     private DcMotor rightFrontMotor;
     private DcMotor rightBackMotor;
+    private DcMotor leadScrew;
     private CRServo armServo1;
     private CRServo armServo2;
     private Servo collector;
 
     public void runOpMode() {
-        double servoPower = 1;
-        double motorPower = 0.5;
-        double collectorPos = 0.5;
         telemetry.addData("Status:", "Initialising");
         telemetry.update();
+
         //Initialise Hardware
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
-        leftBackMotor = hardwareMap.get(DcMotor.class,"leftBackMotor");
+        leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
-        armServo1 = hardwareMap.get(CRServo.class, "servo1");
+        leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
+        armServo1 = hardwareMap.get(CRServo.class, "armServo1");
         armServo2 = hardwareMap.get(CRServo.class, "armServo2");
         collector = hardwareMap.get(Servo.class, "collector");
-        collector.setPosition(collectorPos);
 
         //Correct motor directions
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Initialize driving variables
-        boolean tankDrive, doubleDrive;
+        //Set driving variables
+        boolean tankDrive, doubleDrive, slowDrive;
+        tankDrive = true;
+        slowDrive = doubleDrive = false;
         double left, right;
-        left = right = 0;
+        double speedCorrection = 1;
+        double servoPower = 1;
+        double motorPower = 0.5;
+        double collectorPos = 0.5;
+        collector.setPosition(collectorPos);
 
         waitForStart();
         telemetry.addData("Status:", "Starting OpMode");
@@ -87,30 +93,62 @@ public class MineralArmTest extends LinearOpMode {
                 }
             }
 
-            //Code for driving
+            if (gamepad1.right_bumper)
+                leadScrew.setPower(1);
+            else if (gamepad1.left_bumper)
+                leadScrew.setPower(-1);
+            else
+                leadScrew.setPower(0);
+
+
+            //Get Driving Modes
             if (gamepad1.dpad_up) {
                 tankDrive = true;
                 doubleDrive = false;
                 telemetry.addData("Tank Drive", true);
+                telemetry.update();
+                telemetry.update();
+                telemetry.update();
+                telemetry.update();
+                telemetry.update();
             }
             else if (gamepad1.dpad_down) {
                 tankDrive = false;
                 doubleDrive = false;
                 telemetry.addData("Single Drive", true);
+                telemetry.update();
+                telemetry.update();
+                telemetry.update();
+                telemetry.update();
             }
-            else {
+
+            /*//Milan Drive
+            else if (gamepad1.dpad_left) {
                 tankDrive = false;
                 doubleDrive = true;
                 telemetry.addData("Double Drive", true);
-            }
+                telemetry.update();
+                sleep(100);
+            }*/
 
+            if (gamepad1.dpad_right) {
+                if (slowDrive) {
+                    slowDrive = false;
+                    speedCorrection = 1;
+                }
+                else {
+                    slowDrive = true;
+                    speedCorrection = 3.3;
+                }
+                sleep(200);
+            }
 
             if (tankDrive) {
-                left = -gamepad1.left_stick_y;
-                right = -gamepad1.right_stick_y;
+                left = gamepad1.left_stick_y;
+                right = gamepad1.right_stick_y;
             }
             else {
-                double drive = -gamepad1.left_stick_y;
+                double drive = gamepad1.left_stick_y;
                 double turn = gamepad1.left_stick_x;
 
                 if (doubleDrive) {
@@ -134,10 +172,10 @@ public class MineralArmTest extends LinearOpMode {
             telemetry.addData("left_stick_y: ", gamepad1.left_stick_y);
             telemetry.addData("right_stick_x: ", gamepad1.right_stick_x);
 
-            leftBackMotor.setPower(left);
-            rightBackMotor.setPower(right);
-            leftFrontMotor.setPower(left);
-            rightFrontMotor.setPower(right);
+            leftBackMotor.setPower(left / speedCorrection);
+            rightBackMotor.setPower(right / speedCorrection);
+            leftFrontMotor.setPower(left / speedCorrection);
+            rightFrontMotor.setPower(right / speedCorrection);
             // End code for driving
 
             sleep(10);
