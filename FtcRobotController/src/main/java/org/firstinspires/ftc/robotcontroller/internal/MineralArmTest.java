@@ -25,6 +25,15 @@ public class MineralArmTest extends LinearOpMode {
     private CRServo armServo2;
     private Servo collector;
 
+    //Adjusts drive power
+    public double adjustPower(double power) {
+        if (power < 0)
+            return -(power * power);
+        else
+            return power * power;
+
+    }
+
     public void runOpMode() {
         telemetry.addData("Status:", "Initialising");
         telemetry.update();
@@ -42,7 +51,7 @@ public class MineralArmTest extends LinearOpMode {
 
         //Correct motor directions
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set driving variables
         boolean tankDrive, doubleDrive, slowDrive;
@@ -166,6 +175,14 @@ public class MineralArmTest extends LinearOpMode {
                     right /= maxPower;
                 }
             }
+
+            /*Adjust speeds to give finer control, by squaring previous power. Will reduce until
+            power = 1, since power must be <= 1 to work, this will make it a little easier to
+            control.
+             */
+
+            left = adjustPower(left);
+            right = adjustPower(right);
 
             telemetry.addData("Left power: ", left);
             telemetry.addData("Right power: ", right);
