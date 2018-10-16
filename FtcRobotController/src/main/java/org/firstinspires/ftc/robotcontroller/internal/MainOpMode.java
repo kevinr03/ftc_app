@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="MineralArmTest", group="Testing")
-public class MineralArmTest extends LinearOpMode {
+@TeleOp(name="MOM", group="Competition Op Modes")
+public class MainOpMode extends LinearOpMode {
 
     //Declare Hardware
     private DcMotor armMotor;
@@ -34,9 +34,16 @@ public class MineralArmTest extends LinearOpMode {
 
     }
 
-    public void runOpMode() {
-        telemetry.addData("Status:", "Initialising");
+    public void addTelemetry(String caption, String value, int... times) {
+        for (int n : times) {
+            while (n-- > 0)
+                telemetry.addData(caption, value);
+        }
         telemetry.update();
+    }
+
+    public void runOpMode() {
+        addTelemetry("Status:", "Initialising");
 
         //Initialise Hardware
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
@@ -57,6 +64,7 @@ public class MineralArmTest extends LinearOpMode {
         boolean tankDrive, slowDrive;
         tankDrive = true;
         slowDrive = false;
+        int delayCount = 0;
         double left, right;
         double speedCorrection = 1;
         double servoPower = 1;
@@ -65,8 +73,7 @@ public class MineralArmTest extends LinearOpMode {
         collector.setPosition(collectorPos);
 
         waitForStart();
-        telemetry.addData("Status:", "Starting OpMode");
-        telemetry.update();
+        addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
             if (gamepad2.a)
                 armMotor.setPower(-motorPower);
@@ -113,34 +120,26 @@ public class MineralArmTest extends LinearOpMode {
             //Get Driving Modes
             if (gamepad1.dpad_up) {
                 tankDrive = true;
-                telemetry.addData("Tank Drive", true);
-                telemetry.update();
-                telemetry.update();
-                telemetry.update();
-                telemetry.update();
-                telemetry.update();
+                addTelemetry("Tank Drive", "True", 4);
             }
             else if (gamepad1.dpad_down) {
                 tankDrive = false;
-                telemetry.addData("Single Drive", true);
-                telemetry.update();
-                telemetry.update();
-                telemetry.update();
-                telemetry.update();
+                addTelemetry("Single Drive", "True", 4);
             }
 
 
 
             if (gamepad1.dpad_right) {
-                if (slowDrive) {
+                if (slowDrive && delayCount == 0) {
                     slowDrive = false;
                     speedCorrection = 1;
+                    delayCount = 200;
                 }
-                else {
+                else if (!slowDrive && delayCount == 0) {
                     slowDrive = true;
                     speedCorrection = 3.3;
+                    delayCount = 200;
                 }
-                sleep(200);
             }
 
             if (tankDrive) {
@@ -175,6 +174,7 @@ public class MineralArmTest extends LinearOpMode {
             telemetry.addData("Right power: ", right);
             telemetry.addData("left_stick_y: ", gamepad1.left_stick_y);
             telemetry.addData("right_stick_x: ", gamepad1.right_stick_x);
+            telemetry.update();
 
             leftBackMotor.setPower(left / speedCorrection);
             rightBackMotor.setPower(right / speedCorrection);
@@ -182,6 +182,7 @@ public class MineralArmTest extends LinearOpMode {
             rightFrontMotor.setPower(right / speedCorrection);
             // End code for driving
 
+            delayCount -= 10;
             sleep(10);
         }
     }
