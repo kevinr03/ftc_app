@@ -54,9 +54,9 @@ public class MineralArmTest extends LinearOpMode {
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set driving variables
-        boolean tankDrive, doubleDrive, slowDrive;
+        boolean tankDrive, slowDrive;
         tankDrive = true;
-        slowDrive = doubleDrive = false;
+        slowDrive = false;
         double left, right;
         double speedCorrection = 1;
         double servoPower = 1;
@@ -113,7 +113,6 @@ public class MineralArmTest extends LinearOpMode {
             //Get Driving Modes
             if (gamepad1.dpad_up) {
                 tankDrive = true;
-                doubleDrive = false;
                 telemetry.addData("Tank Drive", true);
                 telemetry.update();
                 telemetry.update();
@@ -123,7 +122,6 @@ public class MineralArmTest extends LinearOpMode {
             }
             else if (gamepad1.dpad_down) {
                 tankDrive = false;
-                doubleDrive = false;
                 telemetry.addData("Single Drive", true);
                 telemetry.update();
                 telemetry.update();
@@ -131,14 +129,7 @@ public class MineralArmTest extends LinearOpMode {
                 telemetry.update();
             }
 
-            /*//Milan Drive
-            else if (gamepad1.dpad_left) {
-                tankDrive = false;
-                doubleDrive = true;
-                telemetry.addData("Double Drive", true);
-                telemetry.update();
-                sleep(100);
-            }*/
+
 
             if (gamepad1.dpad_right) {
                 if (slowDrive) {
@@ -159,10 +150,6 @@ public class MineralArmTest extends LinearOpMode {
             else {
                 double drive = gamepad1.left_stick_y;
                 double turn = gamepad1.left_stick_x;
-
-                if (doubleDrive) {
-                    turn = gamepad1.right_stick_x;
-                }
 
                 // Combine drive and turn for blended motion.
                 left = drive + turn;
