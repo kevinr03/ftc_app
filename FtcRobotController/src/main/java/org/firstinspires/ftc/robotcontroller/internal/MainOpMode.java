@@ -35,10 +35,14 @@ public class MainOpMode extends LinearOpMode {
     }
 
     public void addTelemetry(String caption, String value, int... times) {
-        for (int n : times) {
-            while (n-- > 0)
-                telemetry.addData(caption, value);
+        if (times.length > 0) {
+            for (int n : times) {
+                while (n-- > 0)
+                    telemetry.addData(caption, value);
+            }
         }
+        else
+            telemetry.addData(caption, value);
         telemetry.update();
     }
 
@@ -59,6 +63,7 @@ public class MainOpMode extends LinearOpMode {
         //Correct motor directions
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set driving variables
         boolean tankDrive, slowDrive;
