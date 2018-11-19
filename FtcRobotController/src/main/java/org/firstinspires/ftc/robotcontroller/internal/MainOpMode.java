@@ -4,66 +4,15 @@ package org.firstinspires.ftc.robotcontroller.internal;
  * Created by kevinrockwell on 9/9/18.
  */
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="MOM", group="Competition Op Modes")
-public class MainOpMode extends LinearOpMode {
-
-    //Declare Hardware
-    private DcMotor armMotor;
-    private DcMotor leftFrontMotor;
-    private DcMotor leftBackMotor;
-    private DcMotor rightFrontMotor;
-    private DcMotor rightBackMotor;
-    private DcMotor leadScrew;
-    private CRServo armServo1;
-    private CRServo armServo2;
-    private Servo collector;
-
-    //Adjusts drive power
-    public double adjustPower(double power) {
-        if (power < 0)
-            return -(power * power);
-        else
-            return power * power;
-
-    }
-
-    public void addTelemetry(String caption, String value, int... times) {
-        if (times.length > 0) {
-            for (int n : times) {
-                while (n-- > 0)
-                    telemetry.addData(caption, value);
-            }
-        }
-        else
-            telemetry.addData(caption, value);
-        telemetry.update();
-    }
+public class MainOpMode extends BaseOpMode {
 
     public void runOpMode() {
         addTelemetry("Status:", "Initialising");
 
-        //Initialise Hardware
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
-        leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
-        leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
-        rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
-        leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
-        armServo1 = hardwareMap.get(CRServo.class, "armServo1");
-        armServo2 = hardwareMap.get(CRServo.class, "armServo2");
-        collector = hardwareMap.get(Servo.class, "collector");
-
-        //Correct motor directions
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        initializeHardware();
 
         //Set driving variables
         boolean tankDrive, slowDrive;
@@ -167,9 +116,9 @@ public class MainOpMode extends LinearOpMode {
                 }
             }
 
-            /*Adjust speeds to give finer control, by squaring previous power. Will reduce until
-            power = 1, since power must be <= 1 to work, this will make it a little easier to
-            control.
+            /*Adjust speeds to give finer control, by squaring previous power. Will reduce while
+            -1≤power≤1. Since power must be <= 1 to work, this will make it a little easier to
+            control driving (hopefully)
              */
 
             left = adjustPower(left);
