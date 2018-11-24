@@ -16,10 +16,12 @@ public class MainOpMode extends BaseOpMode
         initializeHardware();
 
         //Set driving variables
-        boolean tankDrive, slowDrive;
+        boolean tankDrive, slowDrive, collectorOn;
         tankDrive = true;
         slowDrive = false;
-        int delayCount = 0;
+        collectorOn = false;
+        int slowDriveDelay = 0;
+        int collectorDelay = 0;
         double left, right;
         double speedCorrection = 1;
         double servoPower = 1;
@@ -28,6 +30,8 @@ public class MainOpMode extends BaseOpMode
         waitForStart();
         addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
+            //Gamepad 2 controls arm stuff
+            //TODO figure out if leadscrew should be gamepad 1 or 2
             if (gamepad2.a)
                 armMotor.setPower(-motorPower);
             else if (gamepad2.b)
@@ -36,10 +40,15 @@ public class MainOpMode extends BaseOpMode
                 armMotor.setPower(0);
 
             if (gamepad2.dpad_up) {
-                collector.setPower(servoPower);
-            }
-            else if (gamepad2.dpad_right) {
-                collector.setPower(0);
+                if (!collectorOn && collectorDelay == 0) {
+                    collectorOn = true;
+                    collectorDelay = 100;
+                }
+                else if (collectorOn && collectorDelay == 0) {
+                    collectorDelay = 100;
+                    collectorOn = false;
+                }
+
             }
 
             if (gamepad1.right_bumper)
@@ -63,15 +72,15 @@ public class MainOpMode extends BaseOpMode
 
 
             if (gamepad1.dpad_right) {
-                if (slowDrive && delayCount == 0) {
+                if (slowDrive && slowDriveDelay == 0) {
                     slowDrive = false;
                     speedCorrection = 1;
-                    delayCount = 200;
+                    slowDriveDelay = 200;
                 }
-                else if (!slowDrive && delayCount == 0) {
+                else if (!slowDrive && slowDriveDelay == 0) {
                     slowDrive = true;
                     speedCorrection = 3.3;
-                    delayCount = 200;
+                    slowDriveDelay = 200;
                 }
             }
 
@@ -114,8 +123,10 @@ public class MainOpMode extends BaseOpMode
             leftFrontMotor.setPower(left / speedCorrection);
             rightFrontMotor.setPower(right / speedCorrection);
             // End code for driving
-
-            delayCount -= 10;
+            if (slowDriveDelay > 0)
+                slowDriveDelay -= 10;
+            if (collectorDelay > 0)
+                collectorDelay -= 10;
             sleep(10);
         }
     }
