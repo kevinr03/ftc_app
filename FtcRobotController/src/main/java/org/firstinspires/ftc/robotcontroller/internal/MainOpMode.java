@@ -82,6 +82,7 @@ public class MainOpMode extends BaseOpMode {
             }
 
 
+
             if (gamepad1.dpad_right) {
                 if (slowDrive && delayCount == 0) {
                     slowDrive = false;
@@ -120,8 +121,8 @@ public class MainOpMode extends BaseOpMode {
             control driving (hopefully)
              */
 
-            left = adjustPower(left, speedCorrection);
-            right = adjustPower(right, speedCorrection);
+            left = adjustPower(left);
+            right = adjustPower(right);
 
             telemetry.addData("Left power: ", left);
             telemetry.addData("Right power: ", right);
@@ -129,10 +130,10 @@ public class MainOpMode extends BaseOpMode {
             telemetry.addData("right_stick_x: ", gamepad1.right_stick_x);
             telemetry.update();
 
-            leftBackMotor.setPower(left);
-            rightBackMotor.setPower(right);
-            leftFrontMotor.setPower(left);
-            rightFrontMotor.setPower(right);
+            leftBackMotor.setPower(left / speedCorrection);
+            rightBackMotor.setPower(right / speedCorrection);
+            leftFrontMotor.setPower(left / speedCorrection);
+            rightFrontMotor.setPower(right / speedCorrection);
             // End code for driving
 
             delayCount -= 10;

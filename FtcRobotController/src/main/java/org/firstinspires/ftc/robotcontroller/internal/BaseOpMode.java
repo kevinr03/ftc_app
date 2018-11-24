@@ -21,11 +21,11 @@ public abstract class BaseOpMode extends LinearOpMode {
 
     /*Adjusts drive power by simply squaring the initial power. Squaring is close enough to the
     Desired exponential shift & a lot clearer, not to mention less work */
-    public double adjustPower(double power, double speedCorrection) {
+    public double adjustPower(double power) {
         if (power < 0)
-            return (-(power * power) / speedCorrection);
+            return -(power * power);
         else
-            return ((power * power) / speedCorrection);
+            return power * power;
 
     }
 
