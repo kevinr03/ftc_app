@@ -4,20 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class BaseOpMode extends LinearOpMode {
-
+public abstract class BaseOpMode extends LinearOpMode
+{
     //Declare Hardware
-    DcMotor armMotor;
-    DcMotor leftFrontMotor;
-    DcMotor leftBackMotor;
-    DcMotor rightFrontMotor;
-    DcMotor rightBackMotor;
-    DcMotor leadScrew;
-    CRServo armServo1;
-    CRServo armServo2;
-    Servo collector;
+    public DcMotor armMotor;
+    public DcMotor leftFrontMotor;
+    public DcMotor leftBackMotor;
+    public DcMotor rightFrontMotor;
+    public DcMotor rightBackMotor;
+    public DcMotor leadScrew;
+    public CRServo collector;
+    public CRServo flipper;
 
     /*Adjusts drive power by simply squaring the initial power. Squaring is close enough to the
     Desired exponential shift & a lot clearer, not to mention less work */
@@ -49,9 +47,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
-        armServo1 = hardwareMap.get(CRServo.class, "armServo1");
-        armServo2 = hardwareMap.get(CRServo.class, "armServo2");
-        collector = hardwareMap.get(Servo.class, "collector");
+        flipper = hardwareMap.get(CRServo.class, "armServo2");
+        collector = hardwareMap.get(CRServo.class, "collector");
 
         //Correct motor directions
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);

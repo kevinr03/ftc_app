@@ -7,7 +7,8 @@ package org.firstinspires.ftc.robotcontroller.internal;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="MOM", group="Competition Op Modes")
-public class MainOpMode extends BaseOpMode {
+public class MainOpMode extends BaseOpMode
+{
 
     public void runOpMode() {
         addTelemetry("Status:", "Initialising");
@@ -23,8 +24,6 @@ public class MainOpMode extends BaseOpMode {
         double speedCorrection = 1;
         double servoPower = 1;
         double motorPower = 0.5;
-        double collectorPos = 0.5;
-        collector.setPosition(collectorPos);
 
         waitForStart();
         addTelemetry("Status:", "Starting OpMode");
@@ -36,31 +35,11 @@ public class MainOpMode extends BaseOpMode {
             else
                 armMotor.setPower(0);
 
-            if (gamepad2.dpad_left)
-                armServo1.setPower(servoPower);
-            else if (gamepad2.dpad_right)
-                armServo1.setPower(servoPower);
-            else
-                armServo1.setPower(0);
-
-            if (gamepad2.dpad_up)
-                armServo2.setPower(servoPower);
-            else if (gamepad2.dpad_down)
-                armServo2.setPower(-servoPower);
-            else
-                armServo2.setPower(0);
-
-            if (gamepad2.right_trigger > 0.0) {
-                if (collectorPos < 1) {
-                    collector.setPosition(collectorPos + (0.01 * gamepad2.right_trigger));
-                    collectorPos = collector.getPosition();
-                }
+            if (gamepad2.dpad_up) {
+                collector.setPower(servoPower);
             }
-            else if (gamepad2.left_trigger > 0.0) {
-                if (collectorPos > 0) {
-                    collector.setPosition(collectorPos - (0.01 * gamepad2.left_trigger));
-                    collectorPos = collector.getPosition();
-                }
+            else if (gamepad2.dpad_right) {
+                collector.setPower(0);
             }
 
             if (gamepad1.right_bumper)
