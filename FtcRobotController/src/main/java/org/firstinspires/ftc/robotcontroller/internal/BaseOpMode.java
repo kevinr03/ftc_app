@@ -7,19 +7,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class BaseOpMode extends LinearOpMode
 {
+
     //Declare Hardware
-    public DcMotor armMotor;
-    public DcMotor leftFrontMotor;
-    public DcMotor leftBackMotor;
-    public DcMotor rightFrontMotor;
-    public DcMotor rightBackMotor;
-    public DcMotor leadScrew;
-    public CRServo collector;
-    public CRServo flipper;
+    DcMotor armMotor;
+    DcMotor leftFrontMotor;
+    DcMotor leftBackMotor;
+    DcMotor rightFrontMotor;
+    DcMotor rightBackMotor;
+    DcMotor leadScrew;
+    CRServo collector;
+    CRServo flipper;
 
     /*Adjusts drive power by simply squaring the initial power. Squaring is close enough to the
     Desired exponential shift & a lot clearer, not to mention less work */
-    public double adjustPower(double power) {
+    double adjustPower(double power) {
         if (power < 0)
             return -(power * power);
         else
@@ -27,7 +28,7 @@ public abstract class BaseOpMode extends LinearOpMode
 
     }
 
-    public void addTelemetry(String caption, String value, int... times) {
+    void addTelemetry(String caption, String value, int... times) {
         if (times.length > 0) {
             for (int n : times) {
                 while (n-- > 0)
@@ -39,7 +40,7 @@ public abstract class BaseOpMode extends LinearOpMode
         telemetry.update();
     }
 
-    public void initializeHardware () {
+    void initializeHardware () {
         //Initialise Hardware
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");

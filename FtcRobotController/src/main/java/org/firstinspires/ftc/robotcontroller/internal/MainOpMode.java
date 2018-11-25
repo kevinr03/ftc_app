@@ -43,12 +43,13 @@ public class MainOpMode extends BaseOpMode
                 if (!collectorOn && collectorDelay == 0) {
                     collectorOn = true;
                     collectorDelay = 100;
+                    collector.setPower(servoPower);
                 }
                 else if (collectorOn && collectorDelay == 0) {
                     collectorDelay = 100;
                     collectorOn = false;
+                    collector.setPower(0);
                 }
-
             }
 
             if (gamepad1.right_bumper)
