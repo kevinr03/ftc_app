@@ -16,12 +16,12 @@ public class MainOpMode extends BaseOpMode
         initializeHardware();
 
         //Set driving variables
-        boolean tankDrive, slowDrive, collectorOn;
+        boolean tankDrive, slowDrive, collectorUp, collectorDown;
         tankDrive = true;
-        slowDrive = false;
-        collectorOn = false;
+        slowDrive = collectorUp = collectorDown = false;
         int slowDriveDelay = 0;
-        int collectorDelay = 0;
+        int collectorUpDelay = 0;
+        int collectorDownDelay = 0;
         double left, right;
         double speedCorrection = 1;
         double servoPower = 1;
@@ -31,27 +31,46 @@ public class MainOpMode extends BaseOpMode
         addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
             //Gamepad 2 controls arm stuff
-            //TODO arm in+out bind to bumpers, flipper to triggers
-            if (gamepad2.a)
+            if (gamepad2.right_bumper)
                 armMotor.setPower(-motorPower);
-            else if (gamepad2.b)
+            else if (gamepad2.left_bumper)
                 armMotor.setPower(motorPower);
             else
                 armMotor.setPower(0);
 
+            //TODO Flipper code here (triggers)
+
+            //Collector control
             if (gamepad2.dpad_up) {
-                if (!collectorOn && collectorDelay == 0) {
-                    collectorOn = true;
-                    collectorDelay = 100;
+                if (collectorDown || (!collectorUp && collectorUpDelay == 0)) {
+                    collectorUp = true;
+                    collectorDown = false;
+                    collectorUpDelay = 150;
+                    collectorDownDelay = 0;
                     collector.setPower(servoPower);
                 }
-                else if (collectorOn && collectorDelay == 0) {
-                    collectorDelay = 100;
-                    collectorOn = false;
+                else if (collectorUp && collectorUpDelay == 0) {
+                    collectorUpDelay = 150;
+                    collectorUp = false;
+                    collector.setPower(0);
+                }
+            }
+            else if (gamepad2.dpad_down) {
+                if (collectorUp || (!collectorDown && collectorDownDelay == 0)) {
+                    collectorDown = true;
+                    collectorUp = false;
+                    collectorDownDelay = 150;
+                    collectorUpDelay = 0;
+                    collector.setPower(-servoPower);
+                }
+                else if (collectorDown && collectorDownDelay == 0) {
+                    collectorDown = false;
+                    collectorDownDelay = 150;
                     collector.setPower(0);
                 }
             }
 
+            //Gamepad 1 does the other stuff
             if (gamepad1.right_bumper)
                 leadScrew.setPower(1);
             else if (gamepad1.left_bumper)
@@ -126,8 +145,10 @@ public class MainOpMode extends BaseOpMode
             // End code for driving
             if (slowDriveDelay > 0)
                 slowDriveDelay -= 10;
-            if (collectorDelay > 0)
-                collectorDelay -= 10;
+            if (collectorUpDelay > 0)
+                collectorUpDelay -= 10;
+            if (collectorDownDelay > 0)
+                collectorDownDelay -= 10;
             sleep(10);
         }
     }

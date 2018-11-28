@@ -3,6 +3,7 @@ package org.firstinspires.ftc.robotcontroller.internal;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="ArmTest", group="Testing")
 public class ArmTest extends BaseOpMode {
@@ -15,6 +16,7 @@ public class ArmTest extends BaseOpMode {
         addTelemetry("Status", "Initializing");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         collector = hardwareMap.get(CRServo.class, "collector");
+        collector.setDirection(DcMotorSimple.Direction.REVERSE);
         boolean collectorUp = false;
         boolean collectorDown = false;
         int collectorUpDelay =  0;
