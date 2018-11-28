@@ -24,7 +24,7 @@ public abstract class BaseAuto extends BaseOpMode
 
     //For Driving Functions
     double wheelDiameter = 4.0;
-    public int ticksPerRev = 1120;
+    int ticksPerRev = 1120;
 
     //for tfod
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";

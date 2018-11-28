@@ -31,7 +31,7 @@ public class MainOpMode extends BaseOpMode
         addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
             //Gamepad 2 controls arm stuff
-            //TODO figure out if leadscrew should be gamepad 1 or 2
+            //TODO arm in+out bind to bumpers, flipper to triggers
             if (gamepad2.a)
                 armMotor.setPower(-motorPower);
             else if (gamepad2.b)

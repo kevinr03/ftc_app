@@ -51,10 +51,11 @@ public abstract class BaseOpMode extends LinearOpMode
         flipper = hardwareMap.get(CRServo.class, "armServo2");
         collector = hardwareMap.get(CRServo.class, "collector");
 
-        //Correct motor directions
+        //Correct motor & CR Servo directions
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        collector.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 }
