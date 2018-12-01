@@ -39,6 +39,13 @@ public class MainOpMode extends BaseOpMode
                 armMotor.setPower(0);
 
             //TODO Flipper code here (triggers)
+            //Flipper code
+            if (gamepad2.right_trigger > 0)
+                flipper.setPower(adjustPower(gamepad2.right_trigger));
+            else if (gamepad2.left_trigger > 0)
+                flipper.setPower(-adjustPower(gamepad2.left_trigger));
+            else
+                flipper.setPower(0);
 
             //Collector control
             if (gamepad2.dpad_up) {
