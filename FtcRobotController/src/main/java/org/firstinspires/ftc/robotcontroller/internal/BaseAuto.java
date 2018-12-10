@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import java.lang.Math.*;
 
 public abstract class BaseAuto extends BaseOpMode
 {
@@ -25,6 +24,7 @@ public abstract class BaseAuto extends BaseOpMode
     //For Driving Functions
     double wheelDiameter = 4.0;
     int ticksPerRev = 1120;
+    boolean isDriving = false;
 
     //for tfod
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -34,8 +34,6 @@ public abstract class BaseAuto extends BaseOpMode
     public void setupAuto() {
         initializeHardware();
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //Vuforia Setup
@@ -57,19 +55,15 @@ public abstract class BaseAuto extends BaseOpMode
 
     private void driveTicks(int ticks, double power) {
         leftFrontMotor.setTargetPosition(leftFrontMotor.getCurrentPosition() + ticks);
-        leftBackMotor.setTargetPosition(leftBackMotor.getCurrentPosition() + ticks);
         rightFrontMotor.setTargetPosition(rightFrontMotor.getCurrentPosition() + ticks);
-        rightBackMotor.setTargetPosition(rightBackMotor.getCurrentPosition() + ticks);
 
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         leftFrontMotor.setPower(power);
-        leftBackMotor.setPower(power);
         rightFrontMotor.setPower(power);
-        rightBackMotor.setPower(power);
+        isDriving = true;
+
     }
 
     public void driveInches(double inches, double power) {
@@ -78,5 +72,30 @@ public abstract class BaseAuto extends BaseOpMode
         driveTicks(ticks, power);
     }
 
+    public void stopDrive() {
+        rightBackMotor.setPower(0);
+        rightFrontMotor.setPower(0);
+        leftFrontMotor.setPower(0);
+        leftBackMotor.setPower(0);
+    }
+
+    public void finishDrive() {
+        if (isDriving) {
+            if (!rightFrontMotor.isBusy()) {
+                rightFrontMotor.setPower(0);
+                rightBackMotor.setPower(0);
+            }
+            if (!leftFrontMotor.isBusy()) {
+                leftFrontMotor.setPower(0);
+                leftBackMotor.setPower(0);
+            }
+            if (!leftFrontMotor.isBusy() && !rightFrontMotor.isBusy()) {
+                stopDrive();
+            }
+        }
+        else
+            stopDrive();
+
+    }
 
 }
