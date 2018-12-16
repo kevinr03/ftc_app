@@ -31,7 +31,7 @@ public class MainOpMode extends BaseOpMode
         addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
             //Gamepad 2 controls arm stuff
-            if (gamepad2.right_bumper)
+            /*if (gamepad2.right_bumper)
                 armMotor.setPower(-motorPower);
             else if (gamepad2.left_bumper)
                 armMotor.setPower(motorPower);
@@ -75,13 +75,13 @@ public class MainOpMode extends BaseOpMode
                     collectorDownDelay = 150;
                     collector.setPower(0);
                 }
-            }
+            }*/
 
             //Gamepad 1 does the other stuff
             if (gamepad1.right_bumper)
-                leadScrew.setPower(1);
-            else if (gamepad1.left_bumper)
                 leadScrew.setPower(-1);
+            else if (gamepad1.left_bumper)
+                leadScrew.setPower(1);
             else
                 leadScrew.setPower(0);
 
@@ -142,7 +142,7 @@ public class MainOpMode extends BaseOpMode
             telemetry.addData("Left power: ", left);
             telemetry.addData("Right power: ", right);
             telemetry.addData("left_stick_y: ", gamepad1.left_stick_y);
-            telemetry.addData("right_stick_x: ", gamepad1.right_stick_x);
+            telemetry.addData("right_stick_y: ", gamepad1.right_stick_y );
             telemetry.update();
 
             leftBackMotor.setPower(left / speedCorrection);
