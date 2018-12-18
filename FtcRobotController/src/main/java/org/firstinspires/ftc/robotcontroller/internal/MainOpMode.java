@@ -112,12 +112,13 @@ public class MainOpMode extends BaseOpMode
             }
 
             if (tankDrive) {
-                left = gamepad1.left_stick_y;
-                right = gamepad1.right_stick_y;
+                left = getLeft();
+                right = getRight();
             }
+
             else {
                 double drive = gamepad1.left_stick_y;
-                double turn = gamepad1.left_stick_x;
+                double turn = getLeft();
 
                 // Combine drive and turn for blended motion.
                 left = drive + turn;

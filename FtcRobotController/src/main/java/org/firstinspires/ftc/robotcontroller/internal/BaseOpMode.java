@@ -28,6 +28,13 @@ public abstract class BaseOpMode extends LinearOpMode
 
     }
 
+    double getRight() {
+        return -gamepad1.right_stick_y;
+    }
+    double getLeft() {
+        return -gamepad1.left_stick_y;
+    }
+
     void addTelemetry(String caption, String value, int... times) {
         if (times.length > 0) {
             for (int n : times) {
@@ -54,8 +61,8 @@ public abstract class BaseOpMode extends LinearOpMode
         //Correct motor & CR Servo directions
         //armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         //collector.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 

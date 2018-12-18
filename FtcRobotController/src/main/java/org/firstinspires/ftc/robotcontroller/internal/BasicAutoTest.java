@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
+import java.lang.Math;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,36 +28,43 @@ public class BasicAutoTest extends BaseOpMode {
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);*/
         initializeHardware();
         waitForStart();
-        extendLeadScrew();
+        //extendLeadScrew();
         while (leadScrew.isBusy()) {
             telemetry.addData("Leadscrew Position:", leadScrew.getCurrentPosition());
             telemetry.update();
         }
-        leadScrew.setPower(0);
-        /*driveInches(4, .3);
+        //leadScrew.setPower(0);
+        driveInches(-6, -.6);
         while (leftFrontMotor.isBusy() || rightFrontMotor.isBusy()) {
-            finishDrive();
-        }*/
+            telemetry.addData("Left Motor Position:", leftFrontMotor.getCurrentPosition());
+            telemetry.addData("Right Motor Position:", rightFrontMotor.getCurrentPosition());
+        }
+        stopDrive();
+
 
 
     }
 
     public void extendLeadScrew() {
         leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //current best: 8369
-        leadScrew.setTargetPosition(8350);
+        leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
         leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leadScrew.setPower(1);
     }
 
     private void driveTicks(int ticks, double power) {
-        leftFrontMotor.setTargetPosition(leftFrontMotor.getCurrentPosition() + ticks);
-        rightFrontMotor.setTargetPosition(rightFrontMotor.getCurrentPosition() + ticks);
-
+        stopDrive();
+        telemetry.addData("Driving Ticks:", Integer.toString(ticks));
+        telemetry.addData("Power:", Double.toString(power));
+        telemetry.update();
+        sleep(1000);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        leftFrontMotor.setTargetPosition(leftFrontMotor.getCurrentPosition() + ticks);
+        rightFrontMotor.setTargetPosition(rightFrontMotor.getCurrentPosition() + ticks);
+        telemetry.addData("Left Motor target:", Double.toString(leftFrontMotor.getTargetPosition()));
+        telemetry.addData("Right Motor Target", Double.toString(rightBackMotor.getTargetPosition()));
+        sleep(1000);
         leftFrontMotor.setPower(power);
         rightFrontMotor.setPower(power);
         leftBackMotor.setPower(power);
@@ -67,7 +75,15 @@ public class BasicAutoTest extends BaseOpMode {
 
     public void driveInches(double inches, double power) {
         double rotations = inches / (wheelDiameter * Math.PI);
-        int ticks = (int) rotations * ticksPerRev;
+        addTelemetry("Rotations:", Double.toString(rotations), 10);
+        sleep(500);
+        double _ticks = rotations * ticksPerRev;
+        addTelemetry("Ticks", Double.toString(_ticks), 10);
+        sleep(500);
+        int ticks = ((int) _ticks);
+        addTelemetry("Int Ticks", Integer.toString(ticks), 5);
+        sleep(500);
+        //addTelemetry("Ticks:", Integer.toString(ticks), 10);
         driveTicks(ticks, power);
     }
 
