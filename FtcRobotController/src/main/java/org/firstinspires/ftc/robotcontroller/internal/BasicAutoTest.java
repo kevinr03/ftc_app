@@ -2,12 +2,11 @@ package org.firstinspires.ftc.robotcontroller.internal;
 
 import java.lang.Math;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name="BasicAutoTest", group="Testing")
-public class BasicAutoTest extends BaseOpMode {
+public class BasicAutoTest extends BaseAuto {
 
     /*DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;*/
     double wheelDiameter = 4.0;
@@ -87,7 +86,7 @@ public class BasicAutoTest extends BaseOpMode {
         driveTicks(ticks, power);
     }
 
-    private void stopDrive() {
+    public void stopDrive() {
         rightBackMotor.setPower(0);
         rightFrontMotor.setPower(0);
         leftFrontMotor.setPower(0);

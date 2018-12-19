@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
+import static java.lang.Math.abs;
+
 public abstract class BaseAuto extends BaseOpMode
 {
 
@@ -53,6 +55,37 @@ public abstract class BaseAuto extends BaseOpMode
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    public void runToPos(int rticks, int lticks, double power) {
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        int leftTarget = leftFrontMotor.getCurrentPosition() + lticks;
+        int rightTarget = rightFrontMotor.getCurrentPosition() + rticks;
+
+        telemetry.addData("Left Target:", leftTarget);
+        telemetry.addData("Right Target:", rightTarget);
+        telemetry.addData("Power:", power);
+        telemetry.update();
+
+        rightFrontMotor.setPower(power);
+        leftFrontMotor.setPower(power);
+        rightBackMotor.setPower(power);
+        leftBackMotor.setPower(power);
+
+        while (abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget) ||
+                abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget)) {
+            if (!(abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget))) {
+                rightFrontMotor.setPower(0);
+                rightBackMotor.setPower(0);
+            }
+            else if (!(abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget))) {
+                leftFrontMotor.setPower(0);
+                leftBackMotor.setPower(0);
+            }
+            sleep(10);
+        }
+        stopDrive();
     }
 
     private void driveTicks(int ticks, double power) {
