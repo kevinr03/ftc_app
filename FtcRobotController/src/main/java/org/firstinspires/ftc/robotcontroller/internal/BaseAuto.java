@@ -11,8 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import static java.lang.Math.abs;
 
-public abstract class BaseAuto extends BaseOpMode
-{
+public abstract class BaseAuto extends BaseOpMode {
 
     String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ8pC6zWh" +
             "9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wyLqGqQqv" +
@@ -78,8 +77,7 @@ public abstract class BaseAuto extends BaseOpMode
             if (!(abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget))) {
                 rightFrontMotor.setPower(0);
                 rightBackMotor.setPower(0);
-            }
-            else if (!(abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget))) {
+            } else if (!(abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget))) {
                 leftFrontMotor.setPower(0);
                 leftBackMotor.setPower(0);
             }
@@ -89,16 +87,7 @@ public abstract class BaseAuto extends BaseOpMode
     }
 
     private void driveTicks(int ticks, double power) {
-        leftFrontMotor.setTargetPosition(leftFrontMotor.getCurrentPosition() + ticks);
-        rightFrontMotor.setTargetPosition(rightFrontMotor.getCurrentPosition() + ticks);
-
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFrontMotor.setPower(power);
-        rightFrontMotor.setPower(power);
-        isDriving = true;
-
+        runToPos(ticks, ticks, power);
     }
 
     public void driveInches(double inches, double power) {
@@ -112,25 +101,6 @@ public abstract class BaseAuto extends BaseOpMode
         rightFrontMotor.setPower(0);
         leftFrontMotor.setPower(0);
         leftBackMotor.setPower(0);
-    }
-
-    public void finishDrive() {
-        if (isDriving) {
-            if (!rightFrontMotor.isBusy()) {
-                rightFrontMotor.setPower(0);
-                rightBackMotor.setPower(0);
-            }
-            if (!leftFrontMotor.isBusy()) {
-                leftFrontMotor.setPower(0);
-                leftBackMotor.setPower(0);
-            }
-            if (!leftFrontMotor.isBusy() && !rightFrontMotor.isBusy()) {
-                stopDrive();
-            }
-        }
-        else
-            stopDrive();
-
     }
 
 }
