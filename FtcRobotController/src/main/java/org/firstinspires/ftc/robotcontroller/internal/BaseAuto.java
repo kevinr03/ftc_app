@@ -57,8 +57,21 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public void runToPos(int rticks, int lticks, double power) {
+        int iter = 0;
+        telemetry.addLine("Run To Pos:");
+        telemetry.addData("Left Ticks:", lticks);
+        telemetry.addData("Right Ticks:", rticks);
+        telemetry.addData("Power", power);
+        telemetry.update();
+        sleep(500);
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
+        telemetry.addData("Right Current Pos", rightFrontMotor.getCurrentPosition());
+        telemetry.update();
+        sleep(500);
         int leftTarget = leftFrontMotor.getCurrentPosition() + lticks;
         int rightTarget = rightFrontMotor.getCurrentPosition() + rticks;
 
@@ -66,7 +79,7 @@ public abstract class BaseAuto extends BaseOpMode {
         telemetry.addData("Right Target:", rightTarget);
         telemetry.addData("Power:", power);
         telemetry.update();
-
+        sleep(500);
         rightFrontMotor.setPower(power);
         leftFrontMotor.setPower(power);
         rightBackMotor.setPower(power);
@@ -74,6 +87,10 @@ public abstract class BaseAuto extends BaseOpMode {
 
         while (abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget) ||
                 abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget)) {
+            telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
+            telemetry.addData("Right Current Pos:", rightFrontMotor.getCurrentPosition());
+            telemetry.update();
+            iter += 10;
             if (!(abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget))) {
                 rightFrontMotor.setPower(0);
                 rightBackMotor.setPower(0);
@@ -87,12 +104,20 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     private void driveTicks(int ticks, double power) {
+        telemetry.addData("Ticks", ticks);
+        telemetry.addData("Power", power);
+        telemetry.update();
         runToPos(ticks, ticks, power);
     }
 
     public void driveInches(double inches, double power) {
-        double rotations = inches * wheelDiameter * Math.PI;
-        int ticks = (int) rotations * ticksPerRev;
+        telemetry.addLine("Drive Inches:");
+        telemetry.addData("Inches", inches);
+        telemetry.addData("Power", power);
+        telemetry.update();
+        sleep(500);
+        double rotations = inches / (wheelDiameter * Math.PI);
+        int ticks = (int) (rotations * ticksPerRev);
         driveTicks(ticks, power);
     }
 
@@ -101,6 +126,13 @@ public abstract class BaseAuto extends BaseOpMode {
         rightFrontMotor.setPower(0);
         leftFrontMotor.setPower(0);
         leftBackMotor.setPower(0);
+    }
+
+    public void extendLeadScrew() {
+        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
+        leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leadScrew.setPower(1);
     }
 
 }

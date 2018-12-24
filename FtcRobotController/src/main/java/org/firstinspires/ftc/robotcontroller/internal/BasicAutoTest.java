@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Autonomous(name="BasicAutoTest", group="Testing")
 public class BasicAutoTest extends BaseAuto {
 
-    /*DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;*/
     double wheelDiameter = 4.0;
     int ticksPerRev = 1120;
     boolean isDriving = false;
@@ -33,7 +32,7 @@ public class BasicAutoTest extends BaseAuto {
             telemetry.update();
         }
         //leadScrew.setPower(0);
-        driveInches(-6, -.6);
+        driveInches(-3, -.6);
         while (leftFrontMotor.isBusy() || rightFrontMotor.isBusy()) {
             telemetry.addData("Left Motor Position:", leftFrontMotor.getCurrentPosition());
             telemetry.addData("Right Motor Position:", rightFrontMotor.getCurrentPosition());
@@ -44,14 +43,9 @@ public class BasicAutoTest extends BaseAuto {
 
     }
 
-    public void extendLeadScrew() {
-        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
-        leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leadScrew.setPower(1);
-    }
 
-    private void driveTicks(int ticks, double power) {
+
+    /*private void driveTicks(int ticks, double power) {
         stopDrive();
         telemetry.addData("Driving Ticks:", Integer.toString(ticks));
         telemetry.addData("Power:", Double.toString(power));
@@ -110,5 +104,5 @@ public class BasicAutoTest extends BaseAuto {
         else
             stopDrive();
 
-    }
+    }*/
 }
