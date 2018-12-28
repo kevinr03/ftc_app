@@ -5,10 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name="BasicAutoTest", group="Testing")
 public class BasicAutoTest extends BaseAuto {
 
-    double wheelDiameter = 4.0;
-    int ticksPerRev = 1120;
-    boolean isDriving = false;
-
     public void runOpMode() {
 
 
