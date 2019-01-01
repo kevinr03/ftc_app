@@ -30,14 +30,54 @@ public class MainOpMode extends BaseOpMode
         waitForStart();
         addTelemetry("Status:", "Starting OpMode");
         while (opModeIsActive()) {
-            //Gamepad 2 controls arm stuff
-            if (gamepad2.right_bumper)
-                armMotor.setPower(-motorPower);
-            else if (gamepad2.left_bumper)
-                armMotor.setPower(motorPower);
-            else
-                armMotor.setPower(0);
 
+            if(gamepad2.a) {
+                mineralLifter.setPower(-0.5);
+            }
+            else if(gamepad2.y) {
+                mineralLifter.setPower(0.5);
+            }
+            else {
+                mineralLifter.setPower(0);
+            }
+
+            if(gamepad2.x) {
+                basketExtension.setPower(0.5);
+            }
+            else if(gamepad2.b) {
+                basketExtension.setPower(-0.5);
+            }
+            else {
+                basketExtension.setPower(0);
+            }
+
+            if(gamepad2.right_bumper) {
+                basketSwivel.setPower(0.5);
+            }
+            else if(gamepad2.left_bumper) {
+                basketSwivel.setPower(-0.5);
+            }
+            else {
+                basketSwivel.setPower(0);
+            }
+
+            if(gamepad2.right_trigger > 0.5) {
+                collector.setPower(1);
+            }
+            else if(gamepad2.left_trigger > 0.5) {
+                collector.setPower(-1);
+            }
+            else {
+                collector.setPower(0);
+            }
+
+            if(gamepad2.dpad_up) {
+                flipper.setPower(0.5);
+            }
+            else if(gamepad2.dpad_down) {
+                flipper.setPower(-0.5);
+            }
+            /*
             //TODO Flipper code here (triggers)
             //Flipper code
             if (gamepad2.right_trigger > 0)
@@ -76,6 +116,7 @@ public class MainOpMode extends BaseOpMode
                     collector.setPower(0);
                 }
             }
+            */
 
             //Gamepad 1 does the other stuff
             if (gamepad1.right_bumper)

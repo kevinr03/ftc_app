@@ -9,7 +9,9 @@ public abstract class BaseOpMode extends LinearOpMode
 {
 
     //Declare Hardware
-    DcMotor armMotor;
+    DcMotor mineralLifter;
+    DcMotor basketSwivel;
+    DcMotor basketExtension;
     DcMotor leftFrontMotor;
     DcMotor leftBackMotor;
     DcMotor rightFrontMotor;
@@ -41,18 +43,22 @@ public abstract class BaseOpMode extends LinearOpMode
     }
 
     void initializeHardware () {
-        //Initialise Hardware
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
+        //Initialize Hardware
+        basketSwivel = hardwareMap.get(DcMotor.class, "basketSwivel");
+        basketExtension = hardwareMap.get(DcMotor.class, "basketExtension");
+        mineralLifter = hardwareMap.get(DcMotor.class, "mineralLifter");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
-        flipper = hardwareMap.get(CRServo.class, "armServo2");
+        flipper = hardwareMap.get(CRServo.class, "flipper");
         collector = hardwareMap.get(CRServo.class, "collector");
 
+
+
         //Correct motor & CR Servo directions
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        mineralLifter.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         collector.setDirection(DcMotorSimple.Direction.REVERSE);
