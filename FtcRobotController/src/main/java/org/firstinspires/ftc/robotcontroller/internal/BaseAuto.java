@@ -121,6 +121,10 @@ public abstract class BaseAuto extends BaseOpMode {
         driveTicks(ticks, power);
     }
 
+    public void turn(double degrees, double power) {
+
+    }
+
     public void stopDrive() {
         rightBackMotor.setPower(0);
         rightFrontMotor.setPower(0);
