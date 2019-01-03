@@ -8,10 +8,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import java.lang.Math.*;
 
-public abstract class BaseAuto extends BaseOpMode
-{
+import static java.lang.Math.abs;
+
+public abstract class BaseAuto extends BaseOpMode {
 
     String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ8pC6zWh" +
             "9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wyLqGqQqv" +
@@ -25,6 +25,7 @@ public abstract class BaseAuto extends BaseOpMode
     //For Driving Functions
     double wheelDiameter = 4.0;
     int ticksPerRev = 1120;
+    boolean isDriving = false;
 
     //for tfod
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -33,9 +34,9 @@ public abstract class BaseAuto extends BaseOpMode
 
     public void setupAuto() {
         initializeHardware();
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //Vuforia Setup
@@ -55,28 +56,87 @@ public abstract class BaseAuto extends BaseOpMode
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
-    private void driveTicks(int ticks, double power) {
-        leftFrontMotor.setTargetPosition(leftFrontMotor.getCurrentPosition() + ticks);
-        leftBackMotor.setTargetPosition(leftBackMotor.getCurrentPosition() + ticks);
-        rightFrontMotor.setTargetPosition(rightFrontMotor.getCurrentPosition() + ticks);
-        rightBackMotor.setTargetPosition(rightBackMotor.getCurrentPosition() + ticks);
+    public void runToPos(int rticks, int lticks, double power) {
+        int iter = 0;
+        telemetry.addLine("Run To Pos:");
+        telemetry.addData("Left Ticks:", lticks);
+        telemetry.addData("Right Ticks:", rticks);
+        telemetry.addData("Power", power);
+        telemetry.update();
+        sleep(500);
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
+        telemetry.addData("Right Current Pos", rightFrontMotor.getCurrentPosition());
+        telemetry.update();
+        sleep(500);
+        int leftTarget = leftFrontMotor.getCurrentPosition() + lticks;
+        int rightTarget = rightFrontMotor.getCurrentPosition() + rticks;
 
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFrontMotor.setPower(power);
-        leftBackMotor.setPower(power);
+        telemetry.addData("Left Target:", leftTarget);
+        telemetry.addData("Right Target:", rightTarget);
+        telemetry.addData("Power:", power);
+        telemetry.update();
+        sleep(500);
         rightFrontMotor.setPower(power);
+        leftFrontMotor.setPower(power);
         rightBackMotor.setPower(power);
+        leftBackMotor.setPower(power);
+
+        while (abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget) ||
+                abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget)) {
+            telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
+            telemetry.addData("Right Current Pos:", rightFrontMotor.getCurrentPosition());
+            telemetry.update();
+            iter += 10;
+            if (!(abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget))) {
+                rightFrontMotor.setPower(0);
+                rightBackMotor.setPower(0);
+            } else if (!(abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget))) {
+                leftFrontMotor.setPower(0);
+                leftBackMotor.setPower(0);
+            }
+            sleep(10);
+        }
+        stopDrive();
+    }
+
+    private void driveTicks(int ticks, double power) {
+        telemetry.addData("Ticks", ticks);
+        telemetry.addData("Power", power);
+        telemetry.update();
+        runToPos(ticks, ticks, power);
     }
 
     public void driveInches(double inches, double power) {
-        double rotations = inches * wheelDiameter * Math.PI;
-        int ticks = (int) rotations * ticksPerRev;
+        telemetry.addLine("Drive Inches:");
+        telemetry.addData("Inches", inches);
+        telemetry.addData("Power", power);
+        telemetry.update();
+        sleep(500);
+        double rotations = inches / (wheelDiameter * Math.PI);
+        int ticks = (int) (rotations * ticksPerRev);
         driveTicks(ticks, power);
     }
 
+    public void turn(double degrees, double power) {
+
+    }
+
+    public void stopDrive() {
+        rightBackMotor.setPower(0);
+        rightFrontMotor.setPower(0);
+        leftFrontMotor.setPower(0);
+        leftBackMotor.setPower(0);
+    }
+
+    public void extendLeadScrew() {
+        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
+        leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leadScrew.setPower(1);
+    }
 
 }

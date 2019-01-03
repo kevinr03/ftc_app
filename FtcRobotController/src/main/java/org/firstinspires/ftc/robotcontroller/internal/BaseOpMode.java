@@ -12,6 +12,7 @@ public abstract class BaseOpMode extends LinearOpMode
     DcMotor mineralLifter;
     DcMotor basketSwivel;
     DcMotor basketExtension;
+
     DcMotor leftFrontMotor;
     DcMotor leftBackMotor;
     DcMotor rightFrontMotor;
@@ -28,6 +29,13 @@ public abstract class BaseOpMode extends LinearOpMode
         else
             return power * power;
 
+    }
+
+    double getRight() {
+        return -gamepad1.right_stick_y;
+    }
+    double getLeft() {
+        return -gamepad1.left_stick_y;
     }
 
     void addTelemetry(String caption, String value, int... times) {
@@ -47,6 +55,8 @@ public abstract class BaseOpMode extends LinearOpMode
         basketSwivel = hardwareMap.get(DcMotor.class, "basketSwivel");
         basketExtension = hardwareMap.get(DcMotor.class, "basketExtension");
         mineralLifter = hardwareMap.get(DcMotor.class, "mineralLifter");
+        //Initialise Hardware
+        //armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
@@ -57,11 +67,21 @@ public abstract class BaseOpMode extends LinearOpMode
 
 
 
+
         //Correct motor & CR Servo directions
         mineralLifter.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         collector.setDirection(DcMotorSimple.Direction.REVERSE);
+        leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //collector.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }
