@@ -55,7 +55,6 @@ public abstract class BaseOpMode extends LinearOpMode
         basketSwivel = hardwareMap.get(DcMotor.class, "basketSwivel");
         basketExtension = hardwareMap.get(DcMotor.class, "basketExtension");
         mineralLifter = hardwareMap.get(DcMotor.class, "mineralLifter");
-        //armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
@@ -73,12 +72,13 @@ public abstract class BaseOpMode extends LinearOpMode
         leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //collector.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //Set motor runmodes
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leadScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }
