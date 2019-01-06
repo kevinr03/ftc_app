@@ -72,6 +72,8 @@ public abstract class BaseOpMode extends LinearOpMode
         leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        basketExtension.setDirection(DcMotorSimple.Direction.REVERSE);
+        basketSwivel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set motor runmodes
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

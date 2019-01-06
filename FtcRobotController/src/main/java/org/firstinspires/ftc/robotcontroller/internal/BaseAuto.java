@@ -13,14 +13,14 @@ import static java.lang.Math.abs;
 
 public abstract class BaseAuto extends BaseOpMode {
 
-    String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ8pC6zWh" +
+    public String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ8pC6zWh" +
             "9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wyLqGqQqv" +
             "I05qNqNahVd9OAHgy+MnrcWfrF1Ta1GUzQGc18K2qC7mioQFIJhc/KMCaFhmOer2sjtmxIp/kak0iDJfp77f" +
             "/8kWvyV2IlnlR187HHWg1mgF9ZZspTYArFZa150FozF7PF7cR9xOuQZT7LuiwO/Ia64M/qa4vcOTlcHVtz6C" +
             "VVC54KW1AAhQEg3p5kkG1hGbHJtvGovp7PKfragvZascLTnkCt4XK28C";
 
-    VuforiaLocalizer vuforia;
-    TFObjectDetector tfod;
+    public VuforiaLocalizer vuforia;
+    public TFObjectDetector tfod;
 
     //For Driving Functions
     double wheelDiameter = 4.0;
@@ -57,13 +57,13 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public void runToPos(int rticks, int lticks, double power) {
-        int iter = 0;
+        double lpower, rpower;
         telemetry.addLine("Run To Pos:");
         telemetry.addData("Left Ticks:", lticks);
         telemetry.addData("Right Ticks:", rticks);
+        power = abs(power);
         telemetry.addData("Power", power);
         telemetry.update();
-        sleep(500);
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -71,26 +71,32 @@ public abstract class BaseAuto extends BaseOpMode {
         telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
         telemetry.addData("Right Current Pos", rightFrontMotor.getCurrentPosition());
         telemetry.update();
-        sleep(500);
         int leftTarget = leftFrontMotor.getCurrentPosition() + lticks;
         int rightTarget = rightFrontMotor.getCurrentPosition() + rticks;
 
+        if (rticks < 0)
+            rpower = -power;
+        else
+            rpower = power;
+        if (lticks < 0)
+            lpower = -power;
+        else
+            lpower = power;
         telemetry.addData("Left Target:", leftTarget);
         telemetry.addData("Right Target:", rightTarget);
         telemetry.addData("Power:", power);
         telemetry.update();
-        sleep(500);
-        rightFrontMotor.setPower(power);
-        leftFrontMotor.setPower(power);
-        rightBackMotor.setPower(power);
-        leftBackMotor.setPower(power);
+
+        rightFrontMotor.setPower(rpower);
+        rightBackMotor.setPower(rpower);
+        leftFrontMotor.setPower(lpower);
+        leftBackMotor.setPower(lpower);
 
         while (abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget) ||
                 abs(leftFrontMotor.getCurrentPosition()) < abs(leftTarget)) {
             telemetry.addData("Left Current Pos:", leftFrontMotor.getCurrentPosition());
             telemetry.addData("Right Current Pos:", rightFrontMotor.getCurrentPosition());
             telemetry.update();
-            iter += 10;
             if (!(abs(rightFrontMotor.getCurrentPosition()) < abs(rightTarget))) {
                 rightFrontMotor.setPower(0);
                 rightBackMotor.setPower(0);
@@ -110,19 +116,21 @@ public abstract class BaseAuto extends BaseOpMode {
         runToPos(ticks, ticks, power);
     }
 
+    public int getTicks(double inches) {
+        double rotations;
+        int ticks;
+        rotations = inches / (wheelDiameter * Math.PI);
+        ticks = (int) (rotations * ticksPerRev);
+        return ticks;
+    }
+
     public void driveInches(double inches, double power) {
-        telemetry.addLine("Drive Inches:");
-        telemetry.addData("Inches", inches);
-        telemetry.addData("Power", power);
-        telemetry.update();
-        sleep(500);
-        double rotations = inches / (wheelDiameter * Math.PI);
-        int ticks = (int) (rotations * ticksPerRev);
+        int ticks = getTicks(inches);
         driveTicks(ticks, power);
     }
 
     public void turn(double degrees, double power) {
-
+        //TODO
     }
 
     public void stopDrive() {
@@ -137,6 +145,16 @@ public abstract class BaseAuto extends BaseOpMode {
         leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
         leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leadScrew.setPower(1);
+        while (leadScrew.isBusy()) {}
+        leadScrew.setPower(0);
+    }
+
+    public void startAuto() {
+        extendLeadScrew();
+        driveInches(-1.75, 0.3);
+        runToPos(getTicks(-3.5), getTicks(3.5), .6);
+        driveInches(-2, .3);
+        runToPos(getTicks(33), getTicks(-33), .6);
     }
 
 }

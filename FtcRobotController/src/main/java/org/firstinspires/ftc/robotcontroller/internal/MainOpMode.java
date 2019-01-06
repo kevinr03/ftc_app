@@ -32,17 +32,17 @@ public class MainOpMode extends BaseOpMode
             //Gamepad 2 controls arm stuff
 
             if (gamepad2.a) {
-                mineralLifter.setPower(-0.5);
+                mineralLifter.setPower(-0.35);
             } else if (gamepad2.y) {
-                mineralLifter.setPower(0.5);
+                mineralLifter.setPower(0.35);
             } else {
                 mineralLifter.setPower(0);
             }
 
             if (gamepad2.x) {
-                basketExtension.setPower(0.5);
-            } else if (gamepad2.b) {
                 basketExtension.setPower(-0.5);
+            } else if (gamepad2.b) {
+                basketExtension.setPower(0.5);
             } else {
                 basketExtension.setPower(0);
             }

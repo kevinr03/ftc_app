@@ -11,24 +11,8 @@ public class BasicAutoTest extends BaseAuto {
 
         initializeHardware();
         waitForStart();
-        //extendLeadScrew();
-        while (leadScrew.isBusy()) {
-            telemetry.addData("Leadscrew Position:", leadScrew.getCurrentPosition());
-            telemetry.update();
-        }
-        //leadScrew.setPower(0);
-        /*driveInches(-3, -.6);
-        while (leftFrontMotor.isBusy() || rightFrontMotor.isBusy()) {
-            telemetry.addData("Left Motor Position:", leftFrontMotor.getCurrentPosition());
-            telemetry.addData("Right Motor Position:", rightFrontMotor.getCurrentPosition());
-        }
+        startAuto();
         stopDrive();
-        */
-        runToPos((int) (4 * PI * ticksPerRev), (int) -(4 * PI * ticksPerRev), .3);
-        while (leftFrontMotor.isBusy() || rightFrontMotor.isBusy()) {
-            telemetry.addData("Left Motor Position:", leftFrontMotor.getCurrentPosition());
-            telemetry.addData("Right Motor Position:", rightFrontMotor.getCurrentPosition());
-        }
-        stopDrive();
+        driveInches(44, .6);
     }
 }
