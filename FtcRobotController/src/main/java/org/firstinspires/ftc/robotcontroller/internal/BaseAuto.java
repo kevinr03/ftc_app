@@ -157,4 +157,9 @@ public abstract class BaseAuto extends BaseOpMode {
         runToPos(getTicks(33), getTicks(-33), .6);
     }
 
+    public void dumpMarker() {
+        teamMarker.setPosition(0);
+        sleep(750);
+        teamMarker.setPosition(1);
+    }
 }

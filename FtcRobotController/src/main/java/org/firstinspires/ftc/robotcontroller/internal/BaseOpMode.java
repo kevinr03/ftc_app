@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class BaseOpMode extends LinearOpMode
 {
@@ -20,6 +21,7 @@ public abstract class BaseOpMode extends LinearOpMode
     DcMotor leadScrew;
     CRServo collector;
     CRServo flipper;
+    Servo teamMarker;
 
     /*Adjusts drive power by simply squaring the initial power. Squaring is close enough to the
     Desired exponential shift & a lot clearer, not to mention less work */
@@ -62,7 +64,7 @@ public abstract class BaseOpMode extends LinearOpMode
         leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
         flipper = hardwareMap.get(CRServo.class, "flipper");
         collector = hardwareMap.get(CRServo.class, "collector");
-
+        teamMarker = hardwareMap.get(Servo.class, "teamMarker");
 
 
 
@@ -74,6 +76,9 @@ public abstract class BaseOpMode extends LinearOpMode
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         basketExtension.setDirection(DcMotorSimple.Direction.REVERSE);
         basketSwivel.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Set Servo Positions
+        teamMarker.setPosition(1);
 
         //Set motor runmodes
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
