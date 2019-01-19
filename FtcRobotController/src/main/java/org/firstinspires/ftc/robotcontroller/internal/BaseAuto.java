@@ -8,16 +8,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import java.util.List;
 
 import static java.lang.Math.abs;
 
 public abstract class BaseAuto extends BaseOpMode {
 
-    public String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ8pC6zWh" +
-            "9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wyLqGqQqv" +
-            "I05qNqNahVd9OAHgy+MnrcWfrF1Ta1GUzQGc18K2qC7mioQFIJhc/KMCaFhmOer2sjtmxIp/kak0iDJfp77f" +
-            "/8kWvyV2IlnlR187HHWg1mgF9ZZspTYArFZa150FozF7PF7cR9xOuQZT7LuiwO/Ia64M/qa4vcOTlcHVtz6C" +
-            "VVC54KW1AAhQEg3p5kkG1hGbHJtvGovp7PKfragvZascLTnkCt4XK28C";
+    public String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ" +
+            "8pC6zWh9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wy" +
+            "LqGqQqvI05qNqNahVd9OAHgy+MnrcWfrF1Ta1GUzQGc18K2qC7mioQFIJhc/KMCaFhmOer2sjtmxIp/kak0i" +
+            "DJfp77f/8kWvyV2IlnlR187HHWg1mgF9ZZspTYArFZa150FozF7PF7cR9xOuQZT7LuiwO/Ia64M/qa4vcOTl" +
+            "cHVtz6CVVC54KW1AAhQEg3p5kkG1hGbHJtvGovp7PKfragvZascLTnkCt4XK28C";
 
     public VuforiaLocalizer vuforia;
     public TFObjectDetector tfod;
@@ -141,11 +142,14 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public void extendLeadScrew() {
-        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        /*leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
         leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leadScrew.setPower(1);
         while (leadScrew.isBusy()) {}
+        leadScrew.setPower(0);*/
+        leadScrew.setPower(1);
+        sleep(6850);
         leadScrew.setPower(0);
     }
 

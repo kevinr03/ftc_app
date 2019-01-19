@@ -12,7 +12,6 @@ public class MainOpMode extends BaseOpMode
 
     public void runOpMode() {
         addTelemetry("Status:", "Initialising");
-
         initializeHardware();
         //Set driving variables
         boolean tankDrive, slowDrive, collectorUp, collectorDown;
@@ -25,7 +24,6 @@ public class MainOpMode extends BaseOpMode
         double speedCorrection = 1;
         double servoPower = 1;
         double motorPower = 0.5;
-
         waitForStart();
         addTelemetry("Status:", "Starting OpMode (new)");
         while (opModeIsActive()) {
@@ -54,7 +52,6 @@ public class MainOpMode extends BaseOpMode
             } else {
                 basketSwivel.setPower(0);
             }
-
 
             //Flipper code
             if (gamepad2.right_trigger > 0)
