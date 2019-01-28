@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
+import java.util.Date;
 
 import static java.lang.Math.abs;
 
@@ -22,6 +24,7 @@ public abstract class BaseAuto extends BaseOpMode {
 
     public VuforiaLocalizer vuforia;
     public TFObjectDetector tfod;
+    private Date date = new Date();
 
     //For Driving Functions
     double wheelDiameter = 4.0;
@@ -165,5 +168,14 @@ public abstract class BaseAuto extends BaseOpMode {
         teamMarker.setPosition(0);
         sleep(750);
         teamMarker.setPosition(1);
+    }
+
+    public void scanMineral(long waitTime) {
+        List<Recognition> updatedRecognitions;
+        long startTime = date.getTime();
+        while (date.getTime() < startTime + waitTime) {
+
+        }
+
     }
 }
