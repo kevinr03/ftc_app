@@ -172,9 +172,67 @@ public abstract class BaseAuto extends BaseOpMode {
 
     public void scanMineral(long waitTime) {
         List<Recognition> updatedRecognitions;
+        double angle = 0;
+        short goldPos = -2;
+        int goldMineralX = -1;
+        int silverMineral1X = -1;
+        int silverMineral2X = -1;
         long startTime = date.getTime();
         while (date.getTime() < startTime + waitTime) {
-
+            updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                if (updatedRecognitions.size() == 3) {
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getLeft();
+                        } else if (silverMineral1X == -1) {
+                            silverMineral1X = (int) recognition.getLeft();
+                        } else {
+                            silverMineral2X = (int) recognition.getLeft();
+                        }
+                    }
+                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            goldPos = -1;
+                        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                            telemetry.addData("Gold Mineral Position", "Right");
+                            goldPos = 0;
+                        } else {
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            goldPos = 1;
+                        }
+                    }
+                    telemetry.update();
+                }
+                else if (updatedRecognitions.size() == 2) {
+                    for (Recognition recognition: updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getLeft();
+                        }
+                        else {
+                            if (silverMineral1X == -1)
+                                silverMineral1X = (int) recognition.getLeft();
+                            else
+                                silverMineral2X = (int) recognition.getLeft();
+                        }
+                    }
+                    if (goldMineralX != -1) {
+                        if (goldMineralX < silverMineral1X) {
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            goldPos = -1;
+                        }
+                        else {
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            goldPos = 1;
+                        }
+                    }
+                    else {
+                        telemetry.addData("Gold Mineral Position", "Right");
+                        goldPos = 0;
+                    }
+                }
+            }
         }
 
     }
