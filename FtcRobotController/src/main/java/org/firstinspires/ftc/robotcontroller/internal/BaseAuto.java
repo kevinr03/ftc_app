@@ -234,6 +234,5 @@ public abstract class BaseAuto extends BaseOpMode {
                 }
             }
         }
-
     }
 }

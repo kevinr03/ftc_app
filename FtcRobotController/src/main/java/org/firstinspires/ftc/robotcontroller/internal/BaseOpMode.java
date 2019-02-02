@@ -11,15 +11,13 @@ public abstract class BaseOpMode extends LinearOpMode
 
     //Declare Hardware
     DcMotor mineralLifter;
-    DcMotor basketSwivel;
-    DcMotor basketExtension;
-
+    DcMotor clawLift;
     DcMotor leftFrontMotor;
     DcMotor leftBackMotor;
     DcMotor rightFrontMotor;
     DcMotor rightBackMotor;
     DcMotor leadScrew;
-    CRServo collector;
+    Servo collector;
     CRServo flipper;
     Servo teamMarker;
 
@@ -52,10 +50,17 @@ public abstract class BaseOpMode extends LinearOpMode
         telemetry.update();
     }
 
+    double scalePower(double power, double max) {
+        /*Scales power to be between 0 and max*/
+        if (max > 1) {
+            throw new IllegalArgumentException("Maximum Power cannot be > 1");
+        }
+        return max * power;
+    }
+
     void initializeHardware () {
         //Initialize Hardware
-        basketSwivel = hardwareMap.get(DcMotor.class, "basketSwivel");
-        basketExtension = hardwareMap.get(DcMotor.class, "basketExtension");
+        clawLift = hardwareMap.get(DcMotor.class, "clawLift");
         mineralLifter = hardwareMap.get(DcMotor.class, "mineralLifter");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
@@ -63,19 +68,17 @@ public abstract class BaseOpMode extends LinearOpMode
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
         flipper = hardwareMap.get(CRServo.class, "flipper");
-        collector = hardwareMap.get(CRServo.class, "collector");
+        collector = hardwareMap.get(Servo.class, "collector");
         teamMarker = hardwareMap.get(Servo.class, "teamMarker");
 
 
 
         //Correct motor & CR Servo directions
         mineralLifter.setDirection(DcMotorSimple.Direction.REVERSE);
-        collector.setDirection(DcMotorSimple.Direction.REVERSE);
         leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        basketExtension.setDirection(DcMotorSimple.Direction.REVERSE);
-        basketSwivel.setDirection(DcMotorSimple.Direction.REVERSE);
+        clawLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set Servo Positions
         teamMarker.setPosition(1);

@@ -37,55 +37,25 @@ public class MainOpMode extends BaseOpMode
                 mineralLifter.setPower(0);
             }
 
-            if (gamepad2.x) {
-                basketExtension.setPower(-0.5);
-            } else if (gamepad2.b) {
-                basketExtension.setPower(0.5);
-            } else {
-                basketExtension.setPower(0);
-            }
-
             if (gamepad2.right_bumper) {
-                basketSwivel.setPower(0.5);
+                clawLift.setPower(0.5);
             } else if (gamepad2.left_bumper) {
-                basketSwivel.setPower(-0.5);
+                clawLift.setPower(-0.5);
             } else {
-                basketSwivel.setPower(0);
+                clawLift.setPower(0);
             }
 
             //Flipper code
             if (gamepad2.right_trigger > 0)
-                flipper.setPower(1.0);
+                flipper.setPower(scalePower(gamepad2.right_trigger, .4));
             else if (gamepad2.left_trigger > 0)
-                flipper.setPower(-1.0);
+                flipper.setPower(scalePower(gamepad2.left_trigger, .4));
             else
                 flipper.setPower(0);
 
             //Collector control
-            if (gamepad2.dpad_up) {
-                if (collectorDown || (!collectorUp && collectorUpDelay == 0)) {
-                    collectorUp = true;
-                    collectorDown = false;
-                    collectorUpDelay = 150;
-                    collectorDownDelay = 0;
-                    collector.setPower(servoPower);
-                } else if (collectorUp && collectorUpDelay == 0) {
-                    collectorUpDelay = 150;
-                    collectorUp = false;
-                    collector.setPower(0);
-                }
-            } else if (gamepad2.dpad_down) {
-                if (collectorUp || (!collectorDown && collectorDownDelay == 0)) {
-                    collectorDown = true;
-                    collectorUp = false;
-                    collectorDownDelay = 150;
-                    collectorUpDelay = 0;
-                    collector.setPower(-servoPower);
-                } else if (collectorDown && collectorDownDelay == 0) {
-                    collectorDown = false;
-                    collectorDownDelay = 150;
-                    collector.setPower(0);
-                }
+            if (gamepad2.right_trigger > 0) {
+
             }
 
 

@@ -17,9 +17,9 @@ public class DropMarker extends BaseAuto {
         driveInches(60, .6);
         runToPos(getTicks(5), getTicks(-5), .4);
         driveInches(4, .4);
-        basketSwivel.setPower(.5);
+        clawLift.setPower(.5);
         sleep(2000);
-        basketSwivel.setPower(0);*/
+        clawLift.setPower(0);*/
     }
 
 }
