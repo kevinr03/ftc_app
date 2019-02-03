@@ -38,26 +38,26 @@ public class MainOpMode extends BaseOpMode
             }
 
             if (gamepad2.right_bumper) {
-                clawLift.setPower(0.5);
+                clawLift.setPower(0.25);
             } else if (gamepad2.left_bumper) {
-                clawLift.setPower(-0.5);
+                clawLift.setPower(-0.25);
             } else {
                 clawLift.setPower(0);
             }
 
             //Flipper code
             if (gamepad2.right_trigger > 0)
-                flipper.setPower(scalePower(gamepad2.right_trigger, .4));
+                flipper.setPower(scalePower(gamepad2.right_trigger, .3));
             else if (gamepad2.left_trigger > 0)
-                flipper.setPower(scalePower(gamepad2.left_trigger, .4));
+                flipper.setPower(scalePower(-gamepad2.left_trigger, .3));
             else
                 flipper.setPower(0);
 
             //Collector control
-            if (gamepad2.right_trigger > 0) {
-
-            }
-
+            if (gamepad2.x)
+                collector.setPosition(1);
+            else if (gamepad2.b)
+                collector.setPosition(.53);
 
             //Gamepad 1 does the other stuff
             if (gamepad1.right_bumper)

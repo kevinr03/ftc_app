@@ -17,12 +17,12 @@ public abstract class BaseOpMode extends LinearOpMode
     DcMotor rightFrontMotor;
     DcMotor rightBackMotor;
     DcMotor leadScrew;
+    DcMotor flipper;
     Servo collector;
-    CRServo flipper;
     Servo teamMarker;
 
     /*Adjusts drive power by simply squaring the initial power. Squaring is close enough to the
-    Desired exponential shift & a lot clearer, not to mention less work */
+      Desired exponential shift & a lot clearer, not to mention less work */
     double adjustPower(double power) {
         if (power < 0)
             return -(power * power);
@@ -67,7 +67,7 @@ public abstract class BaseOpMode extends LinearOpMode
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         leadScrew = hardwareMap.get(DcMotor.class, "leadScrew");
-        flipper = hardwareMap.get(CRServo.class, "flipper");
+        flipper = hardwareMap.get(DcMotor.class, "flipper");
         collector = hardwareMap.get(Servo.class, "collector");
         teamMarker = hardwareMap.get(Servo.class, "teamMarker");
 
