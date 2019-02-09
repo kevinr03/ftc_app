@@ -171,6 +171,9 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public void scanMineral(long waitTime) {
+        /*This code is known to the State of California to cause Cancer, Birth Defects,
+         *and other reproductive harm.
+         */
         List<Recognition> updatedRecognitions;
         double angle = 0;
         short goldPos = -2;
