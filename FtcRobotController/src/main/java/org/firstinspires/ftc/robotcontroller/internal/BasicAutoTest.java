@@ -13,6 +13,6 @@ public class BasicAutoTest extends BaseAuto {
         waitForStart();
         startAuto();
         stopDrive();
-        //driveInches(44, .6);
+        driveInches(44, .6);
     }
 }
