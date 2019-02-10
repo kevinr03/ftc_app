@@ -13,6 +13,7 @@ public class BasicAutoTest extends BaseAuto {
         waitForStart();
         startAuto();
         stopDrive();
-        driveInches(44, .6);
+        scanMineral(5000);
+        //driveInches(44, .6);
     }
 }

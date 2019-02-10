@@ -43,21 +43,13 @@ public abstract class BaseAuto extends BaseOpMode {
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //Vuforia Setup
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = vuforiaKey;
-        parameters.cameraDirection = CameraDirection.BACK;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        //tfod setup
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+        initVuforia();
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+            telemetry.update();
+        }
     }
 
     public void runToPos(int rticks, int lticks, double power) {
@@ -144,6 +136,34 @@ public abstract class BaseAuto extends BaseOpMode {
         leftBackMotor.setPower(0);
     }
 
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = vuforiaKey;
+        parameters.cameraDirection = CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        telemetry.addData("Vuforia initalized:", vuforia!=null);
+        telemetry.update();
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+        telemetry.addData("TFOD==null:", tfod==null);
+        telemetry.update();
+    }
+
     public void extendLeadScrew() {
         /*leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
@@ -152,13 +172,14 @@ public abstract class BaseAuto extends BaseOpMode {
         while (leadScrew.isBusy()) {}
         leadScrew.setPower(0);*/
         leadScrew.setPower(1);
-        sleep(6850);
+        sleep(7100);
         leadScrew.setPower(0);
     }
 
     public void startAuto() {
+        tfod.activate();
         extendLeadScrew();
-        driveInches(-1.75, 0.3);
+        driveInches(-2.00, 0.3);
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
         driveInches(-2, .3);
         runToPos(getTicks(33), getTicks(-33), .6);
@@ -170,7 +191,7 @@ public abstract class BaseAuto extends BaseOpMode {
         teamMarker.setPosition(1);
     }
 
-    public void scanMineral(long waitTime) {
+    public int scanMineral(long waitTime) {
         /*This code is known to the State of California to cause Cancer, Birth Defects,
          *and other reproductive harm.
          */
@@ -236,6 +257,8 @@ public abstract class BaseAuto extends BaseOpMode {
                     }
                 }
             }
+            sleep(0100);
         }
+        return goldPos;
     }
 }
