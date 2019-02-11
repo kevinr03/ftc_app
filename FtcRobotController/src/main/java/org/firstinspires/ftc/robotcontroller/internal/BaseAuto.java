@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -16,11 +15,11 @@ import static java.lang.Math.abs;
 
 public abstract class BaseAuto extends BaseOpMode {
 
-    public String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyMEOoMpSZ" +
-            "8pC6zWh9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEnUKN0wy" +
-            "LqGqQqvI05qNqNahVd9OAHgy+MnrcWfrF1Ta1GUzQGc18K2qC7mioQFIJhc/KMCaFhmOer2sjtmxIp/kak0i" +
-            "DJfp77f/8kWvyV2IlnlR187HHWg1mgF9ZZspTYArFZa150FozF7PF7cR9xOuQZT7LuiwO/Ia64M/qa4vcOTl" +
-            "cHVtz6CVVC54KW1AAhQEg3p5kkG1hGbHJtvGovp7PKfragvZascLTnkCt4XK28C";
+    public final String vuforiaKey = "AUAchNn/////AAAAGfqAcfY2+0TviBOpWNWvbFVO+Ki3ke54hx4bK3LAyME" +
+            "OoMpSZ8pC6zWh9BQwmaUwpR8FxMbNylft5qxYuRVSaA5ijKZj2Gd5F4m8TKzk9YD+ZTRH0T/bzvhZLMr1IEn" +
+            "UKN0wyLqGqQqvI05qNqNahVd9OAHgy+MnrcWfrF1Ta1GUzQGc18K2qC7mioQFIJhc/KMCaFhmOer2sjtmxIp" +
+            "/kak0iDJfp77f/8kWvyV2IlnlR187HHWg1mgF9ZZspTYArFZa150FozF7PF7cR9xOuQZT7LuiwO/Ia64M/qa" +
+            "4vcOTlcHVtz6CVVC54KW1AAhQEg3p5kkG1hGbHJtvGovp7PKfragvZascLTnkCt4XK28C";
 
     public VuforiaLocalizer vuforia;
     public TFObjectDetector tfod;
@@ -150,7 +149,6 @@ public abstract class BaseAuto extends BaseOpMode {
 
         telemetry.addData("Vuforia initalized:", vuforia!=null);
         telemetry.update();
-
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
@@ -183,6 +181,7 @@ public abstract class BaseAuto extends BaseOpMode {
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
         driveInches(-2, .3);
         runToPos(getTicks(33), getTicks(-33), .6);
+        driveInches(-3.5, .6);
     }
 
     public void dumpMarker() {
@@ -192,7 +191,9 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public int scanMineral(long waitTime) {
-        /*This code is known to the State of California to cause Cancer, Birth Defects,
+        /*
+        California Proposition 65 Warning:
+        This code is known to the State of California to cause Cancer, Birth Defects,
          *and other reproductive harm.
          */
         List<Recognition> updatedRecognitions;
@@ -257,7 +258,7 @@ public abstract class BaseAuto extends BaseOpMode {
                     }
                 }
             }
-            sleep(0100);
+            sleep(100);
         }
         return goldPos;
     }

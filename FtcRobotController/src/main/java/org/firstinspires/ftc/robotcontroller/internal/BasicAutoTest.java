@@ -8,8 +8,9 @@ public class BasicAutoTest extends BaseAuto {
 
     public void runOpMode() {
 
+        addTelemetry("status: ", "Initializing");
+        setupAuto();
 
-        initializeHardware();
         waitForStart();
         startAuto();
         stopDrive();

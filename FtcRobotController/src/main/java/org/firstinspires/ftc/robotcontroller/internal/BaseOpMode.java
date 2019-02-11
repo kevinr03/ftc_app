@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -60,6 +59,7 @@ public abstract class BaseOpMode extends LinearOpMode
 
     void initializeHardware () {
         //Initialize Hardware
+        addTelemetry("Status: ", "Initializing Hardware");
         clawLift = hardwareMap.get(DcMotor.class, "clawLift");
         mineralLifter = hardwareMap.get(DcMotor.class, "mineralLifter");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
@@ -70,7 +70,7 @@ public abstract class BaseOpMode extends LinearOpMode
         flipper = hardwareMap.get(DcMotor.class, "flipper");
         collector = hardwareMap.get(Servo.class, "collector");
         teamMarker = hardwareMap.get(Servo.class, "teamMarker");
-
+        addTelemetry("Hardware: ", "Initalized");
 
 
         //Correct motor & CR Servo directions
@@ -89,6 +89,7 @@ public abstract class BaseOpMode extends LinearOpMode
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leadScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        addTelemetry("Hardware Setup: ", "Complete");
     }
 
 }

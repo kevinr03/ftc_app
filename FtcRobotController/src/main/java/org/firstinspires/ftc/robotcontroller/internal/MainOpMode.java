@@ -14,16 +14,12 @@ public class MainOpMode extends BaseOpMode
         addTelemetry("Status:", "Initialising");
         initializeHardware();
         //Set driving variables
-        boolean tankDrive, slowDrive, collectorUp, collectorDown;
+        boolean tankDrive, slowDrive;
         tankDrive = true;
-        slowDrive = collectorUp = collectorDown = false;
+        slowDrive = false;
         int slowDriveDelay = 0;
-        int collectorUpDelay = 0;
-        int collectorDownDelay = 0;
         double left, right;
         double speedCorrection = 1;
-        double servoPower = 1;
-        double motorPower = 0.5;
         waitForStart();
         addTelemetry("Status:", "Starting OpMode (new)");
         while (opModeIsActive()) {
@@ -130,10 +126,6 @@ public class MainOpMode extends BaseOpMode
             // End code for driving
             if (slowDriveDelay > 0)
                 slowDriveDelay -= 10;
-            if (collectorUpDelay > 0)
-                collectorUpDelay -= 10;
-            if (collectorDownDelay > 0)
-                collectorDownDelay -= 10;
             sleep(10);
         }
     }
