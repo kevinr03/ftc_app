@@ -43,9 +43,9 @@ public class MainOpMode extends BaseOpMode
 
             //Flipper code
             if (gamepad2.right_trigger > 0)
-                flipper.setPower(scalePower(gamepad2.right_trigger, .3));
+                flipper.setPower(scalePower(gamepad2.right_trigger, .5));
             else if (gamepad2.left_trigger > 0)
-                flipper.setPower(scalePower(-gamepad2.left_trigger, .3));
+                flipper.setPower(scalePower(-gamepad2.left_trigger, .5));
             else
                 flipper.setPower(0);
 

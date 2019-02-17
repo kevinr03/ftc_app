@@ -143,10 +143,8 @@ public abstract class BaseAuto extends BaseOpMode {
 
         parameters.vuforiaLicenseKey = vuforiaKey;
         parameters.cameraDirection = CameraDirection.BACK;
-
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
         telemetry.addData("Vuforia initalized:", vuforia!=null);
         telemetry.update();
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
@@ -180,8 +178,8 @@ public abstract class BaseAuto extends BaseOpMode {
         driveInches(-2.00, 0.3);
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
         driveInches(-2, .3);
-        runToPos(getTicks(33), getTicks(-33), .6);
-        driveInches(-3.5, .6);
+        runToPos(getTicks(29), getTicks(-29), .6); //29.5 is center
+        driveInches(-3, .6);
     }
 
     public void dumpMarker() {
@@ -192,18 +190,18 @@ public abstract class BaseAuto extends BaseOpMode {
 
     public int scanMineral(long waitTime) {
         /*
-        California Proposition 65 Warning:
-        This code is known to the State of California to cause Cancer, Birth Defects,
-         *and other reproductive harm.
-         */
+        *California Proposition 65 Warning:
+        *This code is known to the State of California to cause Cancer, Birth Defects,
+        *and other reproductive harm.
+        */
         List<Recognition> updatedRecognitions;
         double angle = 0;
         short goldPos = -2;
         int goldMineralX = -1;
         int silverMineral1X = -1;
         int silverMineral2X = -1;
-        long startTime = date.getTime();
-        while (date.getTime() < startTime + waitTime) {
+        int start= 0;
+        while (start < 5000) {
             updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 if (updatedRecognitions.size() == 3) {
@@ -244,17 +242,20 @@ public abstract class BaseAuto extends BaseOpMode {
                     }
                     if (goldMineralX != -1) {
                         if (goldMineralX < silverMineral1X) {
-                            telemetry.addData("Gold Mineral Position", "Left");
-                            goldPos = -1;
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            telemetry.update();
+                            goldPos = 1;
                         }
                         else {
-                            telemetry.addData("Gold Mineral Position", "Center");
+                            telemetry.addData("Gold Mineral Position", "Right");
+                            telemetry.update();
                             goldPos = 1;
                         }
                     }
                     else {
-                        telemetry.addData("Gold Mineral Position", "Right");
-                        goldPos = 0;
+                        telemetry.addData("Gold Mineral Position", "Left");
+                        telemetry.update();
+                        goldPos = -1;
                     }
                 }
             }
