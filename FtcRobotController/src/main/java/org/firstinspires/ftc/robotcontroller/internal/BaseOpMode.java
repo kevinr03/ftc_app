@@ -75,7 +75,6 @@ public abstract class BaseOpMode extends LinearOpMode
 
         //Correct motor & CR Servo directions
         mineralLifter.setDirection(DcMotorSimple.Direction.REVERSE);
-        leadScrew.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         clawLift.setDirection(DcMotorSimple.Direction.REVERSE);
