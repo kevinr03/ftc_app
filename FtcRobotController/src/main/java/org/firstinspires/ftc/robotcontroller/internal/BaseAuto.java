@@ -177,8 +177,8 @@ public abstract class BaseAuto extends BaseOpMode {
         extendLeadScrew();
         driveInches(-2.00, 0.3);
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
-        driveInches(-2, .6);
-        runToPos(getTicks(27), getTicks(-27), .6); //29.5 is center
+        driveInches(-2, .3);
+        runToPos(getTicks(29), getTicks(-29), .6); //29.5 is center
         driveInches(-3, .6);
     }
 
@@ -201,7 +201,7 @@ public abstract class BaseAuto extends BaseOpMode {
         int silverMineral1X = -1;
         int silverMineral2X = -1;
         int start= 0;
-        while (start < waitTime) {
+        while (start < 5000) {
             updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 if (updatedRecognitions.size() == 3) {
@@ -260,7 +260,6 @@ public abstract class BaseAuto extends BaseOpMode {
                 }
             }
             sleep(100);
-            start += 100;
         }
         return goldPos;
     }
