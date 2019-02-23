@@ -57,9 +57,9 @@ public class MainOpMode extends BaseOpMode
 
             //Gamepad 1 does the other stuff
             if (gamepad1.right_bumper)
-                leadScrew.setPower(-1);
-            else if (gamepad1.left_bumper)
                 leadScrew.setPower(1);
+            else if (gamepad1.left_bumper)
+                leadScrew.setPower(-1);
             else
                 leadScrew.setPower(0);
 
