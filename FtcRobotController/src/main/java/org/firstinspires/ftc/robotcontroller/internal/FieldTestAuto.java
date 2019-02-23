@@ -3,10 +3,12 @@ package org.firstinspires.ftc.robotcontroller.internal;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="LeadscrewTestAuto", group="")
+@Autonomous(name="LeadscrewTestAuto", group="Testing")
 public class FieldTestAuto extends BaseAuto {
 
     public void runOpMode() {
+        initializeHardware();
+        waitForStart();
         leadScrew.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leadScrew.setTargetPosition(leadScrew.getCurrentPosition() + (ticksPerRev / 2));
         leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
