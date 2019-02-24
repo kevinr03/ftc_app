@@ -16,5 +16,6 @@ public class BasicAutoTest extends BaseAuto {
         stopDrive();
         scanMineral(5000);
         //driveInches(44, .6);
+
     }
 }

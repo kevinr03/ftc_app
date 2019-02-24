@@ -3,18 +3,26 @@ package org.firstinspires.ftc.robotcontroller.internal;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import java.lang.System;
+
 @Autonomous(name="LeadscrewTestAuto", group="Testing")
 public class FieldTestAuto extends BaseAuto {
 
     public void runOpMode() {
         initializeHardware();
-        waitForStart();
+        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leadScrew.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leadScrew.setTargetPosition(leadScrew.getCurrentPosition() + (ticksPerRev / 2));
-        leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leadScrew.setPower(.3);
-        while (leadScrew.isBusy()) {}
-        leadScrew.setPower(0);
+        waitForStart();
+       long startTime = System.currentTimeMillis();
+       leadScrew.setTargetPosition(leadScrew.getCurrentPosition() + (int) (6.5 * ticksPerRev));
+       leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       leadScrew.setPower(1);
+       while (leadScrew.isBusy()) {}
+       long runTime = startTime - System.currentTimeMillis();
+       telemetry.addData("Runtime: ", runTime);
+       telemetry.addData("Pos: ", leadScrew.getCurrentPosition());
+       telemetry.update();
     }
+
 
 }

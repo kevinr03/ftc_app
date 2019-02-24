@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
-import java.util.Date;
 
 import static java.lang.Math.abs;
 
@@ -23,7 +22,6 @@ public abstract class BaseAuto extends BaseOpMode {
 
     public VuforiaLocalizer vuforia;
     public TFObjectDetector tfod;
-    private Date date = new Date();
 
     //For Driving Functions
     double wheelDiameter = 4.0;
@@ -161,14 +159,11 @@ public abstract class BaseAuto extends BaseOpMode {
     }
 
     public void extendLeadScrew() {
-        /*leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leadScrew.setTargetPosition(8350); //DO NOT CHANGE VALUE
+        leadScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leadScrew.setTargetPosition((int) (6.5 * ticksPerRev)); //DO NOT CHANGE VALUE
         leadScrew.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leadScrew.setPower(1);
         while (leadScrew.isBusy()) {}
-        leadScrew.setPower(0);*/
-        leadScrew.setPower(1);
-        sleep(7100);
         leadScrew.setPower(0);
     }
 
@@ -201,7 +196,7 @@ public abstract class BaseAuto extends BaseOpMode {
         int silverMineral1X = -1;
         int silverMineral2X = -1;
         int start= 0;
-        while (start < 5000) {
+        while (start < waitTime) {
             updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 if (updatedRecognitions.size() == 3) {
@@ -260,6 +255,7 @@ public abstract class BaseAuto extends BaseOpMode {
                 }
             }
             sleep(100);
+            start += 100;
         }
         return goldPos;
     }
