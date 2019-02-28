@@ -27,7 +27,8 @@ public class BasicAutoTest extends BaseAuto {
         }
         else if (goldPos == 0) {
             //Gold Position Center
-            runToPos(getTicks(1.17), 0, .6);
+            driveInches(-1, -1);
+            runToPos(getTicks(7), -getTicks(7), -.6);
             driveInches(40, .6);
         }
         else if (goldPos == 1) {
