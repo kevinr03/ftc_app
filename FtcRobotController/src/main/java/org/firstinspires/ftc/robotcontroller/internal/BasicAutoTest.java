@@ -14,7 +14,7 @@ public class BasicAutoTest extends BaseAuto {
         waitForStart();
         startAuto();
         stopDrive();
-        int goldPos = scanMineral(3000);
+        int goldPos = scanMineral(5000);
 
         telemetry.addData("GoldPos = ", goldPos);
         telemetry.update();
@@ -22,27 +22,34 @@ public class BasicAutoTest extends BaseAuto {
             //Gold Position Left
             driveInches(1, 1);
             runToPos(getTicks(14.5), -getTicks(14.5), 1);
-            driveInches(40, .6);
+            driveInches(39, .6);
             runToPos(getTicks(9*3.5), -getTicks(9*3.51), .6);
-            driveInches(-18, .6);
+            driveInches(-24, .6);
             dumpMarker();
+            driveInches(71, 1);
+
         }
         else if (goldPos == 0) {
             //Gold Position Center
-            driveInches(-1, -1);
+            driveInches(1, 1);
             runToPos(getTicks(3), -getTicks(3), 1);
             driveInches(44, .6);
             runToPos(getTicks(58.8), getTicks(-58.8), -.6); //180 deg turn
             dumpMarker();
         }
         else if (goldPos == 1) {
-            //Gold Position Left
+            //Gold Position Right
             driveInches(1, 1);
             runToPos(-getTicks(3), getTicks(3), 1);
+            sleep(5000);
             driveInches(40, .6);
             runToPos(-getTicks(27), getTicks(27), .6);
-            driveInches(-16, .6);
+            driveInches(-18, .6);
             dumpMarker();
+            //runToPos(getTicks(3.5), getTicks(-3.5), .6);
+            //driveInches(65, 1);
+            //runToPos(-getTicks(24.5), getTicks(24.5), .6);
+            //driveInches(72, 1);
         }
     }
 }

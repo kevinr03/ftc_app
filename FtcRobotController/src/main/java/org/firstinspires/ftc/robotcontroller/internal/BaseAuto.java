@@ -174,8 +174,8 @@ public abstract class BaseAuto extends BaseOpMode {
         driveInches(-2.00, 0.3);
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
         driveInches(-2, .3);
-        runToPos(getTicks(25), getTicks(-25), .6); //29.5 is center
-        driveInches(-1, .6);
+        runToPos(getTicks(26), getTicks(-26), .6); //29.5 is center
+        driveInches(-2, .6);
     }
 
     public void dumpMarker() {
