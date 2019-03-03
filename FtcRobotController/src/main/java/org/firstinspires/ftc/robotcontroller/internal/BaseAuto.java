@@ -27,6 +27,7 @@ public abstract class BaseAuto extends BaseOpMode {
     double wheelDiameter = 4.0;
     int ticksPerRev = 1120;
     boolean isDriving = false;
+    long degree = getTicks(3.5) / 15;
 
     //for tfod
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -173,8 +174,8 @@ public abstract class BaseAuto extends BaseOpMode {
         driveInches(-2.00, 0.3);
         runToPos(getTicks(-3.5), getTicks(3.5), .6);
         driveInches(-2, .3);
-        runToPos(getTicks(29), getTicks(-29), .6); //29.5 is center
-        driveInches(-3, .6);
+        runToPos(getTicks(25), getTicks(-25), .6); //29.5 is center
+        driveInches(-1, .6);
     }
 
     public void dumpMarker() {
@@ -239,7 +240,7 @@ public abstract class BaseAuto extends BaseOpMode {
                         if (goldMineralX < silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Center");
                             telemetry.update();
-                            goldPos = 1;
+                            goldPos = 0;
                         }
                         else {
                             telemetry.addData("Gold Mineral Position", "Right");

@@ -10,7 +10,7 @@ public class DropMarker extends BaseAuto {
         startAuto();
         stopDrive();
         driveInches(44, .6);
-        runToPos(getTicks(60), getTicks(-60), -.4); //180 deg turn
+        runToPos(getTicks(60), getTicks(-60), -.6); //180 deg turn
         dumpMarker();
         //Concept crater, completely untested lolll
         /*runToPos(getTicks(30), getTicks(-30), .7);

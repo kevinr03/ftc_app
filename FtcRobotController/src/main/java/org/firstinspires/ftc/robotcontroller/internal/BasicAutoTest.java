@@ -22,20 +22,27 @@ public class BasicAutoTest extends BaseAuto {
             //Gold Position Left
             driveInches(1, 1);
             runToPos(getTicks(14.5), -getTicks(14.5), 1);
-            sleep(500);
             driveInches(40, .6);
+            runToPos(getTicks(9*3.5), -getTicks(9*3.51), .6);
+            driveInches(-18, .6);
+            dumpMarker();
         }
         else if (goldPos == 0) {
             //Gold Position Center
             driveInches(-1, -1);
-            runToPos(getTicks(7), -getTicks(7), -.6);
-            driveInches(40, .6);
+            runToPos(getTicks(3), -getTicks(3), 1);
+            driveInches(44, .6);
+            runToPos(getTicks(58.8), getTicks(-58.8), -.6); //180 deg turn
+            dumpMarker();
         }
         else if (goldPos == 1) {
             //Gold Position Left
             driveInches(1, 1);
-            runToPos(0, getTicks(20), 1);
+            runToPos(-getTicks(3), getTicks(3), 1);
             driveInches(40, .6);
+            runToPos(-getTicks(27), getTicks(27), .6);
+            driveInches(-16, .6);
+            dumpMarker();
         }
     }
 }
